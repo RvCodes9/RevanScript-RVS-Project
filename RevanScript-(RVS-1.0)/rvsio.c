@@ -9,6 +9,7 @@ void rvs_standard_output(const char* const data){
     printf("%s", RVS_COLOR_GREEN);
     while (data[i] != '\0'){
 
+        // Classic Escape Sequances
         if (data[i] == '\\' && data[i + 1] == 'n'){
             putchar('\n');
             i += 2;
@@ -22,6 +23,41 @@ void rvs_standard_output(const char* const data){
         else if (data[i] == '\\' && data[i + 1] == 'a'){
             putchar('\a');
             i += 2;
+        }
+        
+        // Color Escape Sequances
+        else if (data[i] == '\\' && data[i + 1] == 'c'){
+            switch (data[i + 2]){
+                case '0': 
+                    printf("%s", RVS_COLOR_RESET); 
+                    break;
+                case '1':
+                    printf("%s", RVS_COLOR_BLACK); 
+                    break;
+                case '2':
+                    printf("%s", RVS_COLOR_RED); 
+                    break;
+                case '3':
+                    printf("%s", RVS_COLOR_GREEN); 
+                    break;
+                case '4':
+                    printf("%s", RVS_COLOR_YELLOW); 
+                    break;
+                case '5':
+                    printf("%s", RVS_COLOR_BLUE); 
+                    break;
+                case '6':
+                    printf("%s", RVS_COLOR_MAGENTA); 
+                    break;
+                case '7':
+                    printf("%s", RVS_COLOR_CYAN); 
+                    break;
+                case '8':
+                    printf("%s", RVS_COLOR_WHITE); 
+                    break;
+            }
+
+            i += 3;
         }
 
         else{
