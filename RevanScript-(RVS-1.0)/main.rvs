@@ -1,5 +1,9 @@
 ... RevanScript simple codes
 
-prt "\c4Hello"
-prt "\c5Star"
-prt "\c6Join"
+prt "\c4Hello, World!\b"
+prt "\c5\tStar"
+prt "\c6Beep\a"
+
+end
+
+prt "Hello"

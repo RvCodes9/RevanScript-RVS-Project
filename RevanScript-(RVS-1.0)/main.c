@@ -8,7 +8,8 @@
 	RevanScript (RVS) Programming Language
 	RevanScript (RVS) Interpreter Program (Direct Execution Model)
 	--------------------------------------------
-	C Source Codes
+	C Source Codes  |  C1999 / C99 Standard | Compiler -> GNU Compiler Collections (GCC)
+	automatic compile file -> executable.sh
 */
 
 /*
@@ -90,9 +91,73 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-// RevanScript (RVS) Standard Engine Librarys
+// RevanScript (RVS) Standard Core/Engine Librarys
 #include "rvsio.h"
 #include "rvsctl.h"
+#include "rvsmem.h"
+#include "rvsbuf.h"
+
+
+// RevanScript (RVS) Variable Create Function
+bool var(const char* const code_line, RVSMEM* rvs_global_memory){
+	RVSBUF* rvs_variable_buffer = rvs_buffer_create();
+	if (!rvs_variable_buffer) return 0;
+
+	bool assignment_operation_check = false;
+	bool string_literal_check = false;
+
+	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
+		if (code_line[i] == '='){
+			if (assignment_operation_check == false){
+				assignment_operation_check = true;
+			}
+		}
+
+		else if (assignment_operation_check == false){
+			if (code_line[i] == ' ') continue;
+			rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter++] = code_line[i];
+		}
+
+		else if (assignment_operation_check == true){
+			if (code_line[i] == '\"'){
+				if (string_literal_check == false){
+					string_literal_check = true;
+				}
+
+				else{
+					string_literal_check = false;
+				}
+			}
+
+			else if (string_literal_check == true){
+				rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
+			}
+		}
+	}
+
+	rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter] = '\0';
+	rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter] = '\0';
+
+	printf("Variable Name : %s\n", rvs_variable_buffer->variable_name);
+	printf("Variable Data : %s\n", rvs_variable_buffer->variable_data);
+
+	if (rvs_variable_name_check(rvs_variable_buffer->variable_name) == false){
+		rvs_buffer_delete(rvs_variable_buffer);
+		return false;
+	}
+
+	// RevanScript (RVS) Global Memory Write Buffer Data
+	strcpy(rvs_global_memory->variable_names[rvs_global_memory->variable_iter], rvs_variable_buffer->variable_name);
+	strcpy(rvs_global_memory->variable_datas[rvs_global_memory->variable_iter], rvs_variable_buffer->variable_data);
+	
+	printf("\nGlobal Memory Variable Name : %s\n", rvs_global_memory->variable_names[rvs_global_memory->variable_iter]);
+	printf("Global Memory Variable Data : %s\n", rvs_global_memory->variable_datas[rvs_global_memory->variable_iter]);
+
+	rvs_global_memory->variable_iter++;
+
+	rvs_buffer_delete(rvs_variable_buffer);
+	return true;
+}
 
 
 // RevanScript (RVS) Print Function
@@ -148,8 +213,13 @@ bool prt(const char* const code_line){
 
 
 // RevanScript (RVS) Keyword Search Function
-bool keys(const char* const code_line){
+bool keys(const char* const code_line, RVSMEM* rvs_global_memory){
 	if (strncmp(code_line, "...", 3) == 0){
+		return true;
+	}
+
+	else if (strncmp(code_line, "var ", 4) == 0){
+		if (!var(code_line + 4, rvs_global_memory)) return false;
 		return true;
 	}
 
@@ -175,7 +245,7 @@ bool keys(const char* const code_line){
 
 
 // RevanScript (RVS) Read Eval Print Loop (REPL) Function
-bool repl(void){
+bool repl(RVSMEM* rvs_global_memory){
 	char* code_line = (char*) malloc(sizeof(char) * 2049);
 	if (!code_line) return false;
 
@@ -193,7 +263,7 @@ bool repl(void){
 			continue;
 		}
 
-		else if (!keys(code_line)){
+		else if (!keys(code_line, rvs_global_memory)){
 			free(code_line);
 			return false;
 		}
@@ -205,7 +275,7 @@ bool repl(void){
 
 
 // RevanScript (RVS) File Reader
-bool file(const char* const file_name){
+bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 	FILE* file_open = fopen(file_name, "r");
 
 	if (!file){
@@ -226,7 +296,7 @@ bool file(const char* const file_name){
 				continue;
 			}
 
-			else if (!keys(code_line)){
+			else if (!keys(code_line, rvs_global_memory)){
 				free(code_line);
 				return false;
 			}
@@ -242,10 +312,20 @@ bool file(const char* const file_name){
 // RevanScript Main Function
 int main(const int argc, const char** const argv){
 
+	// RevanScript Global Memory
+	RVSMEM* rvs_global_memory = rvs_memory_create();
+	if (!rvs_global_memory) return 1;
+
 	// REPL mode
 	if (argc == 1){
-		if (!repl()){
+		if (!repl(rvs_global_memory)){
+			rvs_memory_delete(rvs_global_memory);
 			return 1;
+		}
+
+		else{
+			rvs_memory_delete(rvs_global_memory);
+			return 0;
 		}
 	}
 	
@@ -253,21 +333,25 @@ int main(const int argc, const char** const argv){
 	else if (argc == 2){
 		if (rvs_file_type_check(argv[1] + (strlen(argv[1]) - 4)) == true){
 
-			if (!file(argv[1])){
+			if (!file(argv[1], rvs_global_memory)){
+				rvs_memory_delete(rvs_global_memory);
 				return 1;
 			}
 
 			else{
+				rvs_memory_delete(rvs_global_memory);
 				return 0;
 			}
 		}
 
 		else{
+			rvs_memory_delete(rvs_global_memory);
 			return 1;
 		}
 	}
 
 	else{
+		rvs_memory_delete(rvs_global_memory);
 		return 1;
 	}
 }

@@ -12,19 +12,28 @@ void rvs_standard_output(const char* const data){
     while (data[i] != '\0'){
 
         // Classic Escape Sequances
+
+        // New Line (\n)
         if (data_length >= i + 2 && data[i] == '\\' && data[i + 1] == 'n'){
             putchar('\n');
             i += 2;
         }
 
+        // Tab Line (\t)
         else if (data_length >= i + 2 && data[i] == '\\' && data[i + 1] == 't'){
             putchar('\t');
             i += 2;
         }
 
+        // Beep sound (\a)
         else if (data_length >= i + 2 && data[i] == '\\' && data[i + 1] == 'a'){
             putchar('\a');
             i += 2;
+        }
+
+        // Backspace (\b)
+        else if (data_length >= i + 3 && data[i + 1] == '\\' && data[i + 2] == 'b'){
+            i += 3;
         }
         
         // Color Escape Sequances
@@ -42,6 +51,7 @@ void rvs_standard_output(const char* const data){
             }
         }
 
+        // Output Character
         else{
             putchar(data[i]);
             i++;
