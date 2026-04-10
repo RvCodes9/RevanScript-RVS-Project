@@ -34,7 +34,6 @@ RVSBUF* rvs_buffer_create(void){
 
     rvs_buffer->variable_name_counter = 0;
     rvs_buffer->variable_data_counter = 0;
-    rvs_buffer->variable_type_counter = 0;
 
     return rvs_buffer;
 }

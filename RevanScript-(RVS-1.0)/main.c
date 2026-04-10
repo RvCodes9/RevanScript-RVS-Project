@@ -101,7 +101,9 @@
 // RevanScript (RVS) Variable Create Function
 bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	RVSBUF* rvs_variable_buffer = rvs_buffer_create();
-	if (!rvs_variable_buffer) return 0;
+	if (!rvs_variable_buffer) return false;
+
+	bool string_type_check = false;
 
 	bool assignment_operation_check = false;
 	bool string_literal_check = false;
@@ -122,6 +124,9 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 			if (code_line[i] == '\"'){
 				if (string_literal_check == false){
 					string_literal_check = true;
+					if (string_type_check == false){
+						string_type_check = true;
+					}
 				}
 
 				else{
@@ -138,22 +143,29 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter] = '\0';
 	rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter] = '\0';
 
+	if (string_type_check == true){
+		strcpy(rvs_variable_buffer->variable_type, "STR");
+	}
+
+	// Debug
 	printf("Variable Name : %s\n", rvs_variable_buffer->variable_name);
 	printf("Variable Data : %s\n", rvs_variable_buffer->variable_data);
+	printf("Variable Type : %s\n", rvs_variable_buffer->variable_type);
 
-	if (rvs_variable_name_check(rvs_variable_buffer->variable_name) == false){
+	if (rvs_variable_name_check(rvs_variable_buffer, rvs_global_memory) == false){
 		rvs_buffer_delete(rvs_variable_buffer);
 		return false;
 	}
 
-	// RevanScript (RVS) Global Memory Write Buffer Data
-	strcpy(rvs_global_memory->variable_names[rvs_global_memory->variable_iter], rvs_variable_buffer->variable_name);
-	strcpy(rvs_global_memory->variable_datas[rvs_global_memory->variable_iter], rvs_variable_buffer->variable_data);
-	
-	printf("\nGlobal Memory Variable Name : %s\n", rvs_global_memory->variable_names[rvs_global_memory->variable_iter]);
-	printf("Global Memory Variable Data : %s\n", rvs_global_memory->variable_datas[rvs_global_memory->variable_iter]);
+	if (rvs_memory_insert(rvs_global_memory, rvs_variable_buffer) == false){
+		rvs_buffer_delete(rvs_variable_buffer);
+		return false;
+	}
 
-	rvs_global_memory->variable_iter++;
+	// Debug
+	printf("\nGlobal Memory Variable Name : %s\n", rvs_global_memory->variable_names[rvs_global_memory->variable_iter - 1]);
+	printf("Global Memory Variable Data : %s\n", rvs_global_memory->variable_datas[rvs_global_memory->variable_iter - 1]);
+	printf("Global Memory Variable Type : %s\n", rvs_global_memory->variable_types[rvs_global_memory->variable_iter - 1]);
 
 	rvs_buffer_delete(rvs_variable_buffer);
 	return true;
@@ -278,7 +290,7 @@ bool repl(RVSMEM* rvs_global_memory){
 bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 	FILE* file_open = fopen(file_name, "r");
 
-	if (!file){
+	if (!file_open){
 		rvs_standard_error(RVS_FILE_PATH_OR_NAME_ERROR, NULL);
 		return false;
 	}

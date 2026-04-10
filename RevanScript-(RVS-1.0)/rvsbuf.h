@@ -16,7 +16,6 @@ typedef struct{
     char* variable_type;
     size_t variable_name_counter;
     size_t variable_data_counter;
-    size_t variable_type_counter;
 } RVSBUF;
 
 

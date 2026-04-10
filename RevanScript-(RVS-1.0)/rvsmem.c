@@ -1,21 +1,102 @@
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdbool.h>
+#include <string.h>
 
+#include "rvsbuf.h"
 #include "rvsmem.h"
 
 
+// RevanScript (RVS) Memory (RVSMEM) Realloc Function
+bool _rvs_memory_realloc(RVSMEM* rvs_memory){
+    size_t rvs_new_memory_size = rvs_memory->memory_size * 2;
+
+    // Reallocate Memory
+    bool* variables_ctrls = (bool*) realloc(rvs_memory->variable_ctrls, sizeof(bool) * rvs_new_memory_size);
+    if (!variables_ctrls) return false;
+
+    char** variables_names = (char**) realloc(rvs_memory->variable_names, sizeof(char*) * rvs_new_memory_size);
+    if (!variables_names) return false;
+
+    char** variables_datas = (char**) realloc(rvs_memory->variable_datas, sizeof(char*) * rvs_new_memory_size);
+    if (!variables_datas) return false;
+
+    char** variables_types = (char**) realloc(rvs_memory->variable_types, sizeof(char*) * rvs_new_memory_size);
+    if (!variables_types) return false;
+
+    // Allocate Memory
+    for (size_t i = rvs_memory->memory_size; i < rvs_new_memory_size; i++){
+
+        // Variable Name
+        variables_names[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_NAME_LENGTH);
+        if (!variables_names[i]){
+            for (size_t j = rvs_memory->memory_size; j < i; j++){
+                free(variables_names[j]);
+                free(variables_datas[j]);
+                free(variables_types[j]);
+            }
+            return false;
+        }
+
+        // Variable Data
+        variables_datas[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_DATA_LENGTH);
+        if (!variables_datas[i]){
+            for (size_t j = rvs_memory->memory_size; j < i; j++){
+                free(variables_names[j]);
+                free(variables_datas[j]);
+                free(variables_types[j]);
+            }
+            return false;
+        }
+
+        // Variable Type
+        variables_types[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_TYPE_LENGTH);
+        if (!variables_types[i]){
+            for (size_t j = rvs_memory->memory_size; j < i; j++){
+                free(variables_names[j]);
+                free(variables_datas[j]);
+                free(variables_types[j]);
+            }
+            return false;
+        }
+    }
+
+    rvs_memory->variable_ctrls = variables_ctrls;
+    for (size_t i = rvs_memory->memory_size; i < rvs_new_memory_size; i++){
+        rvs_memory->variable_ctrls[i] = false;
+    }
+
+    rvs_memory->variable_names = variables_names;
+    rvs_memory->variable_datas = variables_datas;
+    rvs_memory->variable_types = variables_types;
+
+    rvs_memory->memory_size *= 2;
+
+    return true;
+}
+
+
+// RevanScript Memory (RVSMEM) Create Function
 RVSMEM* rvs_memory_create(void){
     RVSMEM* rvs_memory = (RVSMEM*) malloc(sizeof(RVSMEM));
     if (!rvs_memory) return NULL;
 
+    rvs_memory->variable_ctrls = (bool*) malloc(sizeof(bool) * RVS_MEMORY_DEFAULT_SIZE);
+    if (!rvs_memory->variable_ctrls){
+        free(rvs_memory);
+        return false;
+    }
+
     rvs_memory->variable_names = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_names){
+        free(rvs_memory->variable_ctrls);
         free(rvs_memory);
         return NULL;
     }
 
     rvs_memory->variable_datas = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_datas){
+        free(rvs_memory->variable_ctrls);
         free(rvs_memory->variable_names);
         free(rvs_memory);
         return NULL;
@@ -23,6 +104,7 @@ RVSMEM* rvs_memory_create(void){
 
     rvs_memory->variable_types = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_types){
+        free(rvs_memory->variable_ctrls);
         free(rvs_memory->variable_names);
         free(rvs_memory->variable_datas);
         free(rvs_memory);
@@ -30,11 +112,16 @@ RVSMEM* rvs_memory_create(void){
     }
 
     for (size_t i = 0; i < RVS_MEMORY_DEFAULT_SIZE; i++){
-        rvs_memory->variable_names[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_NAME_LENGHT);
+
+        // Variable Name
+        rvs_memory->variable_names[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_NAME_LENGTH);
         if (!rvs_memory->variable_names[i]){
             for (size_t j = 0; j < i; j++){
                 free(rvs_memory->variable_names[j]);
+                free(rvs_memory->variable_datas[j]);
+                free(rvs_memory->variable_types[j]);
             }
+            free(rvs_memory->variable_ctrls);
             free(rvs_memory->variable_names);
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
@@ -42,17 +129,16 @@ RVSMEM* rvs_memory_create(void){
             return NULL;
         }
         rvs_memory->variable_names[i][0] = '\0';
-    }
 
-    for (size_t i = 0; i < RVS_MEMORY_DEFAULT_SIZE; i++){
-        rvs_memory->variable_datas[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_DATA_LENGHT);
+        // Variable Data
+        rvs_memory->variable_datas[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_DATA_LENGTH);
         if (!rvs_memory->variable_datas[i]){
-            for (size_t j = 0; j < RVS_MEMORY_DEFAULT_SIZE; j++){
-                free(rvs_memory->variable_names[j]);
-            }
             for (size_t j = 0; j < i; j++){
+                free(rvs_memory->variable_names[j]);
                 free(rvs_memory->variable_datas[j]);
+                free(rvs_memory->variable_types[j]);
             }
+            free(rvs_memory->variable_ctrls);
             free(rvs_memory->variable_names);
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
@@ -60,18 +146,16 @@ RVSMEM* rvs_memory_create(void){
             return NULL;
         }
         rvs_memory->variable_datas[i][0] = '\0';
-    }
 
-    for (size_t i = 0; i < RVS_MEMORY_DEFAULT_SIZE; i++){
-        rvs_memory->variable_types[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_TYPE_LENGHT);
+        // Variable Type
+        rvs_memory->variable_types[i] = (char*) malloc(sizeof(char) * RVS_MEMORY_VARIABLE_TYPE_LENGTH);
         if (!rvs_memory->variable_types[i]){
-            for (size_t j = 0; j < RVS_MEMORY_DEFAULT_SIZE; j++){
+            for (size_t j = 0; j < i; j++){
                 free(rvs_memory->variable_names[j]);
                 free(rvs_memory->variable_datas[j]);
-            }
-            for (size_t j = 0; j < i; j++){
                 free(rvs_memory->variable_types[j]);
             }
+            free(rvs_memory->variable_ctrls);
             free(rvs_memory->variable_names);
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
@@ -81,19 +165,69 @@ RVSMEM* rvs_memory_create(void){
         rvs_memory->variable_types[i][0] = '\0';
     }
 
+    for (size_t i = 0; i < RVS_MEMORY_DEFAULT_SIZE; i++){
+        rvs_memory->variable_ctrls[i] = false;
+    }
+
     rvs_memory->variable_iter = 0;
+    rvs_memory->memory_size = RVS_MEMORY_DEFAULT_SIZE;
     return rvs_memory;
 }
 
 
-void rvs_memory_delete(RVSMEM* memory){
-    for (size_t i = 0; i < RVS_MEMORY_DEFAULT_SIZE; i++){
-        free(memory->variable_names[i]);
-        free(memory->variable_datas[i]);
-        free(memory->variable_types[i]);
+// RevanScript (RVS) Memory (RVSMEM) Insert Function
+bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
+    strcpy(rvs_memory->variable_names[rvs_memory->variable_iter], rvs_buffer->variable_name);
+	strcpy(rvs_memory->variable_datas[rvs_memory->variable_iter], rvs_buffer->variable_data);
+	strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], rvs_buffer->variable_type);
+
+    if (rvs_memory->variable_iter < rvs_memory->memory_size - 1){
+        rvs_memory->variable_iter++;
     }
-    free(memory->variable_names);
-    free(memory->variable_datas);
-    free(memory->variable_types);
-    free(memory);
+
+    else{
+        if (!_rvs_memory_realloc(rvs_memory)){
+            return false;
+        }
+
+        else{
+            while (true){
+                if (rvs_memory->variable_ctrls[rvs_memory->variable_iter] == false){
+                    rvs_memory->variable_ctrls[rvs_memory->variable_iter] = true;
+                    rvs_memory->variable_iter++;
+                    break;
+                }
+                else rvs_memory->variable_iter++;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+// RevanScript (RVS) Memory (RVSMEM) Check / Variable Name Check Function
+bool rvs_memory_check(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buffer, char type){
+    if (type == 'N'){
+        for (size_t i = 0; i < rvs_memory->memory_size; i++){
+            if (strcmp(rvs_memory->variable_names[i], rvs_buffer->variable_name) == 0){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+// RevanScript (RVS) Memory (RVSMEM) Delete / (free) Function
+void rvs_memory_delete(RVSMEM* rvs_memory){
+    for (size_t i = 0; i < rvs_memory->memory_size; i++){
+        free(rvs_memory->variable_names[i]);
+        free(rvs_memory->variable_datas[i]);
+        free(rvs_memory->variable_types[i]);
+    }
+    free(rvs_memory->variable_names);
+    free(rvs_memory->variable_datas);
+    free(rvs_memory->variable_types);
+    free(rvs_memory);
 }
