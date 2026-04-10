@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "rvsbuf.h"
+#include "../include/rvsbuf.h"
 
 
 RVSBUF* rvs_buffer_create(void){

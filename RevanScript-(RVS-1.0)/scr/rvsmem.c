@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "rvsbuf.h"
-#include "rvsmem.h"
+#include "../include/rvsbuf.h"
+#include "../include/rvsmem.h"
 
 
 // RevanScript (RVS) Memory (RVSMEM) Realloc Function

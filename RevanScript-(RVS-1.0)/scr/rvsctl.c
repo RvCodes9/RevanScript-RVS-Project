@@ -3,9 +3,8 @@
 #include <stddef.h>
 #include <ctype.h>
 
-#include "rvsmem.h"
-
-#include "rvsio.h"
+#include "../include/rvsmem.h"
+#include "../include/rvsio.h"
 
 
 bool rvs_file_type_check(const char* const file_type){

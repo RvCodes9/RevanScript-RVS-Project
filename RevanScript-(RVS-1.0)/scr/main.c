@@ -92,10 +92,10 @@
 #include <stdbool.h>
 
 // RevanScript (RVS) Standard Core/Engine Librarys
-#include "rvsio.h"
-#include "rvsctl.h"
-#include "rvsmem.h"
-#include "rvsbuf.h"
+#include "../include/rvsio.h"
+#include "../include/rvsctl.h"
+#include "../include/rvsmem.h"
+#include "../include/rvsbuf.h"
 
 
 // RevanScript (RVS) Variable Create Function
