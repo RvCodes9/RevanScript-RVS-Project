@@ -118,7 +118,7 @@ RVSMEM* rvs_memory_create(){
     rvs_memory->variable_ctrls = (bool*) malloc(sizeof(bool) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_ctrls){
         if (RVS_MEMORY_DEBUGGER_MODE == true){
-            rvs_standard_debug(false, "Memory craete.");
+            rvs_standard_debug(false, "Memory create.");
         }
         free(rvs_memory);
         return false;
@@ -127,7 +127,7 @@ RVSMEM* rvs_memory_create(){
     rvs_memory->variable_names = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_names){
         if (RVS_MEMORY_DEBUGGER_MODE == true){
-            rvs_standard_debug(false, "Memory craete.");
+            rvs_standard_debug(false, "Memory create.");
         }
         free(rvs_memory->variable_ctrls);
         free(rvs_memory);
@@ -137,7 +137,7 @@ RVSMEM* rvs_memory_create(){
     rvs_memory->variable_datas = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_datas){
         if (RVS_MEMORY_DEBUGGER_MODE == true){
-            rvs_standard_debug(false, "Memory craete.");
+            rvs_standard_debug(false, "Memory create.");
         }
         free(rvs_memory->variable_ctrls);
         free(rvs_memory->variable_names);
@@ -152,7 +152,7 @@ RVSMEM* rvs_memory_create(){
         free(rvs_memory->variable_datas);
         free(rvs_memory);
         if (RVS_MEMORY_DEBUGGER_MODE == true){
-            rvs_standard_debug(false, "Memory craete.");
+            rvs_standard_debug(false, "Memory create.");
         }
         return NULL;
     }
@@ -173,7 +173,7 @@ RVSMEM* rvs_memory_create(){
             free(rvs_memory->variable_types);
             free(rvs_memory);
             if (RVS_MEMORY_DEBUGGER_MODE == true){
-                rvs_standard_debug(false, "Memory craete.");
+                rvs_standard_debug(false, "Memory create.");
             }
             return NULL;
         }
@@ -193,7 +193,7 @@ RVSMEM* rvs_memory_create(){
             free(rvs_memory->variable_types);
             free(rvs_memory);
             if (RVS_MEMORY_DEBUGGER_MODE == true){
-                rvs_standard_debug(false, "Memory craete.");
+                rvs_standard_debug(false, "Memory create.");
             }
             return NULL;
         }
@@ -213,7 +213,7 @@ RVSMEM* rvs_memory_create(){
             free(rvs_memory->variable_types);
             free(rvs_memory);
             if (RVS_MEMORY_DEBUGGER_MODE == true){
-                rvs_standard_debug(false, "Memory craete.");
+                rvs_standard_debug(false, "Memory create.");
             }
             return NULL;
         }
@@ -228,7 +228,7 @@ RVSMEM* rvs_memory_create(){
     rvs_memory->memory_size = RVS_MEMORY_DEFAULT_SIZE;
 
     if (RVS_MEMORY_DEBUGGER_MODE == true){
-        rvs_standard_debug(true, "Memory craete.");
+        rvs_standard_debug(true, "Memory create.");
     }
 
     return rvs_memory;
@@ -263,7 +263,7 @@ bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
     }
 
     if (RVS_MEMORY_DEBUGGER_MODE == true){
-        rvs_standard_debug(true, "Memory Insert.");
+        rvs_standard_debug(true, "Memory insert.");
     }
 
     return true;

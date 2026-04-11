@@ -6,7 +6,7 @@
 #include "rvsbuf.h"
 
 // RevanScript (RVS) Memory Debugger Mode Define
-#define RVS_MEMORY_DEBUGGER_MODE true
+#define RVS_MEMORY_DEBUGGER_MODE false
 
 // RevanScript Memory Standard Define
 #define RVS_MEMORY_DEFAULT_SIZE 1000
