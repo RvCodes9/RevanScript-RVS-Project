@@ -1,5 +1,5 @@
 rm -f RevanScript
-if gcc -std=c99 -O2 -o bin/RevanScript scr/main.c scr/rvsio.c scr/rvsctl.c scr/rvsmem.c scr/rvsbuf.c; then
+if gcc -std=c99 -O2 -o bin/RevanScript src/main.c src/rvsio.c src/rvsctl.c src/rvsmem.c src/rvsbuf.c; then
     echo Successful Executable!!!
 else
     echo No Executable!!!
