@@ -2,6 +2,9 @@
 #define RVSIO_H
 
 
+#include <stdbool.h>
+
+
 #define RVS_COLOR_BLACK     "\033[30m"
 #define RVS_COLOR_RED       "\033[31m"
 #define RVS_COLOR_GREEN     "\033[32m"
@@ -31,6 +34,7 @@
 #define RVS_VARIABLE_NAME_DUBLICATE_ERROR                 "%s[RVSVariableNameDublicateError] : The same variable name cannot be assigned to more than one variable!%s\n"
 
 void rvs_standard_output(const char*);
+void rvs_standard_debug(bool, const char*);
 void rvs_standard_error(const char*, const char*);
 
 #endif

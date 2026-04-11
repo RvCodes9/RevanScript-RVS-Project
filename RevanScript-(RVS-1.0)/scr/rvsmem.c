@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "../include/rvsio.h"
 #include "../include/rvsbuf.h"
 #include "../include/rvsmem.h"
 
@@ -13,16 +14,36 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
 
     // Reallocate Memory
     bool* variables_ctrls = (bool*) realloc(rvs_memory->variable_ctrls, sizeof(bool) * rvs_new_memory_size);
-    if (!variables_ctrls) return false;
+    if (!variables_ctrls){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory Realloc.");
+        }
+        return false;
+    }
 
     char** variables_names = (char**) realloc(rvs_memory->variable_names, sizeof(char*) * rvs_new_memory_size);
-    if (!variables_names) return false;
+    if (!variables_names){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory Realloc.");
+        }
+        return false;
+    }
 
     char** variables_datas = (char**) realloc(rvs_memory->variable_datas, sizeof(char*) * rvs_new_memory_size);
-    if (!variables_datas) return false;
+    if (!variables_datas){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory Realloc.");
+        }
+        return false;
+    }
 
     char** variables_types = (char**) realloc(rvs_memory->variable_types, sizeof(char*) * rvs_new_memory_size);
-    if (!variables_types) return false;
+    if (!variables_types){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory Realloc.");
+        }
+        return false;
+    }
 
     // Allocate Memory
     for (size_t i = rvs_memory->memory_size; i < rvs_new_memory_size; i++){
@@ -35,6 +56,9 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
                 free(variables_datas[j]);
                 free(variables_types[j]);
             }
+            if (RVS_MEMORY_DEBUGGER_MODE == true){
+                rvs_standard_debug(false, "Memory Realloc.");
+            }
             return false;
         }
 
@@ -46,6 +70,9 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
                 free(variables_datas[j]);
                 free(variables_types[j]);
             }
+            if (RVS_MEMORY_DEBUGGER_MODE == true){
+                rvs_standard_debug(false, "Memory Realloc.");
+            }
             return false;
         }
 
@@ -56,6 +83,9 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
                 free(variables_names[j]);
                 free(variables_datas[j]);
                 free(variables_types[j]);
+            }
+            if (RVS_MEMORY_DEBUGGER_MODE == true){
+                rvs_standard_debug(false, "Memory Realloc.");
             }
             return false;
         }
@@ -72,23 +102,33 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
 
     rvs_memory->memory_size *= 2;
 
+    if (RVS_MEMORY_DEBUGGER_MODE == true){
+        rvs_standard_debug(true, "Memory Realloc.");
+    }
+
     return true;
 }
 
 
 // RevanScript Memory (RVSMEM) Create Function
-RVSMEM* rvs_memory_create(void){
+RVSMEM* rvs_memory_create(){
     RVSMEM* rvs_memory = (RVSMEM*) malloc(sizeof(RVSMEM));
     if (!rvs_memory) return NULL;
 
     rvs_memory->variable_ctrls = (bool*) malloc(sizeof(bool) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_ctrls){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory craete.");
+        }
         free(rvs_memory);
         return false;
     }
 
     rvs_memory->variable_names = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_names){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory craete.");
+        }
         free(rvs_memory->variable_ctrls);
         free(rvs_memory);
         return NULL;
@@ -96,6 +136,9 @@ RVSMEM* rvs_memory_create(void){
 
     rvs_memory->variable_datas = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_datas){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory craete.");
+        }
         free(rvs_memory->variable_ctrls);
         free(rvs_memory->variable_names);
         free(rvs_memory);
@@ -108,6 +151,9 @@ RVSMEM* rvs_memory_create(void){
         free(rvs_memory->variable_names);
         free(rvs_memory->variable_datas);
         free(rvs_memory);
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory craete.");
+        }
         return NULL;
     }
 
@@ -126,6 +172,9 @@ RVSMEM* rvs_memory_create(void){
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
             free(rvs_memory);
+            if (RVS_MEMORY_DEBUGGER_MODE == true){
+                rvs_standard_debug(false, "Memory craete.");
+            }
             return NULL;
         }
         rvs_memory->variable_names[i][0] = '\0';
@@ -143,6 +192,9 @@ RVSMEM* rvs_memory_create(void){
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
             free(rvs_memory);
+            if (RVS_MEMORY_DEBUGGER_MODE == true){
+                rvs_standard_debug(false, "Memory craete.");
+            }
             return NULL;
         }
         rvs_memory->variable_datas[i][0] = '\0';
@@ -160,6 +212,9 @@ RVSMEM* rvs_memory_create(void){
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
             free(rvs_memory);
+            if (RVS_MEMORY_DEBUGGER_MODE == true){
+                rvs_standard_debug(false, "Memory craete.");
+            }
             return NULL;
         }
         rvs_memory->variable_types[i][0] = '\0';
@@ -171,6 +226,11 @@ RVSMEM* rvs_memory_create(void){
 
     rvs_memory->variable_iter = 0;
     rvs_memory->memory_size = RVS_MEMORY_DEFAULT_SIZE;
+
+    if (RVS_MEMORY_DEBUGGER_MODE == true){
+        rvs_standard_debug(true, "Memory craete.");
+    }
+
     return rvs_memory;
 }
 
@@ -200,6 +260,10 @@ bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
                 else rvs_memory->variable_iter++;
             }
         }
+    }
+
+    if (RVS_MEMORY_DEBUGGER_MODE == true){
+        rvs_standard_debug(true, "Memory Insert.");
     }
 
     return true;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "../include/rvsio.h"
 
@@ -59,6 +60,17 @@ void rvs_standard_output(const char* const data){
     }
     printf("%s", RVS_COLOR_RESET);
     putchar('\n');
+}
+
+
+void rvs_standard_debug(bool type, const char* const message){
+    if (type == true){
+        printf("%s[DEBUG] : %s%s\n", RVS_COLOR_GREEN, message, RVS_COLOR_RESET);
+    }
+
+    else{
+        printf("%s[DEBUG] : %s%s\n", RVS_COLOR_YELLOW, message, RVS_COLOR_RESET);
+    }
 }
 
 
