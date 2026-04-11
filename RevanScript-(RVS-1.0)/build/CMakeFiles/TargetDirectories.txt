@@ -1,0 +1,3 @@
+/home/revan/Documents/GitHub/RevanScript-RVS-Project/RevanScript-(RVS-1.0)/build/CMakeFiles/RevanScript.dir
+/home/revan/Documents/GitHub/RevanScript-RVS-Project/RevanScript-(RVS-1.0)/build/CMakeFiles/edit_cache.dir
+/home/revan/Documents/GitHub/RevanScript-RVS-Project/RevanScript-(RVS-1.0)/build/CMakeFiles/rebuild_cache.dir

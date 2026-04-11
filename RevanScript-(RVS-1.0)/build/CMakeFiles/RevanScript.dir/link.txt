@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/RevanScript.dir/src/main.c.o CMakeFiles/RevanScript.dir/src/rvsbuf.c.o CMakeFiles/RevanScript.dir/src/rvsctl.c.o CMakeFiles/RevanScript.dir/src/rvsflg.c.o CMakeFiles/RevanScript.dir/src/rvsio.c.o CMakeFiles/RevanScript.dir/src/rvsmem.c.o -o RevanScript 
