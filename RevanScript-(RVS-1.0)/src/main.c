@@ -89,6 +89,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 // RevanScript (RVS) Standard Core/Engine Librarys
@@ -344,11 +345,13 @@ int main(const int argc, const char** const argv){
 	
 	// File mode & Flag mode
 	else if (argc == 2){
-		if (rvs_flag_title_check(argv[1]) == true){
+		uint8_t flag_title_check = rvs_flag_title_check(argv[1]);
+
+		if (flag_title_check == 0){
 			return 0;
 		}
 
-		else if (rvs_file_type_check(argv[1] + (strlen(argv[1]) - 4)) == true){
+		else if (flag_title_check == 2 && rvs_file_type_check(argv[1] + (strlen(argv[1]) - 4)) == true){
 
 			if (!file(argv[1], rvs_global_memory)){
 				rvs_memory_delete(rvs_global_memory);

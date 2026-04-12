@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdint.h>
 
 #include "../include/rvsio.h"
 #include "../include/rvsflg.h"
@@ -24,18 +25,32 @@ void rvs_flag_version(void){
 }
 
 
-bool rvs_flag_title_check(const char* const flag_title){
+void rvs_flag_about(void){
+    printf("%s\n\t\t\t\tRevanScript (RVS) Programming Language%s\n", RVS_COLOR_YELLOW, RVS_COLOR_RESET);
+    printf("\n\t%sThe RevanScript (RVS) programming language was created in 2026 by a programmer named Revan Babayev.\n\tThis programming language is notable for its exterely simple code writing and minimal runtime environment.\n\n%s", RVS_COLOR_CYAN, RVS_COLOR_RESET);
+}
+
+
+uint8_t rvs_flag_title_check(const char* const flag_title){
     if (strcmp(flag_title, "-V") == 0 || strcmp(flag_title, "--version") == 0){
         rvs_flag_version();
-        return true;
+        return 0;
     }
 
     else if (strcmp(flag_title, "-A") == 0 || strcmp(flag_title, "--about") == 0){
-        return true;
+        rvs_flag_about();
+        return 0;
     }
 
     else{
-        return false;
+        if (flag_title[0] == '-' || strncmp(flag_title, "--", 2) == 0){
+            rvs_standard_error(RVS_FLAG_TITLE_ERROR, flag_title);
+            return 1;
+        }
+
+        else{
+            return 2;
+        }
     }
 }
 

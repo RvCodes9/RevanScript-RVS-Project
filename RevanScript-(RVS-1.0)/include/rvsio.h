@@ -20,6 +20,8 @@
 
 
 // RevanScript (RVS) Error Messages
+#define RVS_FLAG_TITLE_ERROR                              "%s[RVSFlagTitleError] : The command with the name \"%s\" does not exist.%s\n"
+
 #define RVS_FILE_TYPE_ERROR                               "%s[RVSFileTypeError] : The file extension must be .rvs!%s\n"
 #define RVS_FILE_PATH_OR_NAME_ERROR                       "%s[RVSFilePathOrNameError] : The file name or path is incorrect!%s\n"
 
@@ -33,8 +35,10 @@
 #define RVS_VARIABLE_NAME_CHARACTER_ERROR                 "%s[RVSVariableNameCharacterError] : A variable name can consist of letters, numbers, and underscores!%s\n"
 #define RVS_VARIABLE_NAME_DUBLICATE_ERROR                 "%s[RVSVariableNameDublicateError] : The same variable name cannot be assigned to more than one variable!%s\n"
 
+
 void rvs_standard_output(const char*);
 void rvs_standard_debug(bool, const char*);
 void rvs_standard_error(const char*, const char*);
+
 
 #endif

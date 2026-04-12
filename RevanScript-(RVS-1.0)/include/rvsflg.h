@@ -1,10 +1,10 @@
 #ifndef RVSFLG_H
 #define RVSFLG_H
 
-#include <stdbool.h>
+#include <stdint.h>
 
 #define RVS_VERSION 1.0
 
-bool rvs_flag_title_check(const char*);
+uint8_t rvs_flag_title_check(const char*);
 
 #endif
