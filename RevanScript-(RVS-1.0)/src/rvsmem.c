@@ -121,7 +121,7 @@ RVSMEM* rvs_memory_create(void){
             rvs_standard_debug(false, "Memory create.");
         }
         free(rvs_memory);
-        return false;
+        return NULL;
     }
 
     rvs_memory->variable_names = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
