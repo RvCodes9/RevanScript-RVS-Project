@@ -19,7 +19,7 @@ bool rvs_file_type_check(const char* const file_type){
 }
 
 
-bool rvs_variable_name_check(const RVSBUF* const rvs_buffer, const RVSMEM* const rvs_memory){
+bool rvs_variable_name_check(const RVSBUF* const rvs_buffer, const RVSMEM* const rvs_memory, bool create_type){
 
     if (rvs_buffer->variable_name[0] == '\0'){
         rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
@@ -43,9 +43,11 @@ bool rvs_variable_name_check(const RVSBUF* const rvs_buffer, const RVSMEM* const
         }
     }
 
-    if (rvs_memory_check(rvs_memory, rvs_buffer, 'N') == true){
-        rvs_standard_error(RVS_VARIABLE_NAME_DUBLICATE_ERROR, NULL);
-        return false;
+    if (create_type == true){
+        if (rvs_memory_check(rvs_memory, rvs_buffer, 'N') == true){
+            rvs_standard_error(RVS_VARIABLE_NAME_DUBLICATE_ERROR, NULL);
+            return false;
+        }
     }
 
     return true;

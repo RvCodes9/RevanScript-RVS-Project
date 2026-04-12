@@ -111,7 +111,7 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
 
 
 // RevanScript Memory (RVSMEM) Create Function
-RVSMEM* rvs_memory_create(){
+RVSMEM* rvs_memory_create(void){
     RVSMEM* rvs_memory = (RVSMEM*) malloc(sizeof(RVSMEM));
     if (!rvs_memory) return NULL;
 
@@ -280,6 +280,18 @@ bool rvs_memory_check(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_bu
         }
     }
     return false;
+}
+
+
+// RevanScript (RVS) Memory (RVSMEM) Get Function
+char* rvs_memory_get(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buffer){
+    for (size_t i = 0; i < rvs_memory->memory_size; i++){
+        if (strcmp(rvs_memory->variable_names[i], rvs_buffer->variable_name) == 0){
+            return rvs_memory->variable_datas[i];
+        }
+    }
+
+    return NULL;
 }
 
 

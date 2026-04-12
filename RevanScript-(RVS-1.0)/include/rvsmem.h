@@ -5,6 +5,7 @@
 
 #include "rvsbuf.h"
 
+
 // RevanScript (RVS) Memory Debugger Mode Define
 #define RVS_MEMORY_DEBUGGER_MODE false
 
@@ -16,6 +17,7 @@
 #define RVS_MEMORY_VARIABLE_DATA_LENGTH 2048
 #define RVS_MEMORY_VARIABLE_TYPE_LENGTH 4
 
+
 // RevanScript Memory Type
 typedef struct{
     char** variable_names;
@@ -26,10 +28,13 @@ typedef struct{
     size_t memory_size;
 } RVSMEM;
 
+
 // RevanScript (RVS) Memory Functions
 RVSMEM* rvs_memory_create(void);
 bool rvs_memory_insert(RVSMEM*, const RVSBUF*);
 bool rvs_memory_check(const RVSMEM*, const RVSBUF*, char);
+char* rvs_memory_get(const RVSMEM*, const RVSBUF*);
 void rvs_memory_delete(RVSMEM*);
+
 
 #endif

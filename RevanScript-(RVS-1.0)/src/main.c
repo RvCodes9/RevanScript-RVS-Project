@@ -29,13 +29,20 @@
 	prt "\a"
 	prt "\""
 	prt "\\"
+	prt "\c1Hello\c0"
 
 	RevanScript kısa adıyla RVS də "REPL MODE" dan əlavə "FILE MODE" da var.
 	Bu xüsusiyyətdən yararlanmaq üçün main.rvs adlı fayl yaradmaqla başlayırsınız.
 
+
 	Linux Terminal 
 		> touch main.rvs
 		> micro main.rvs
+
+		1 prt "Hello, World!"
+
+		<Ctrl S>
+
 
 	faylın içinə micro vəya vim kimi terminal editorlar istifadə edərək faylı aça bilərsiniz.
 	faylın içərisinə sadə bir kod yazırsınız.
@@ -137,7 +144,19 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 			}
 
 			else if (string_literal_check == true){
-				rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
+				if (code_line[i] == '\\' && code_line[i + 1] == '\\'){
+					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = '\\';
+					++i;
+				}
+
+				else if (code_line[i] == '\\' && code_line[i + 1] == '\"'){
+					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = '\"';
+					++i;
+				}
+
+				else{
+					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
+				}
 			}
 		}
 	}
@@ -146,15 +165,14 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter] = '\0';
 
 	if (string_type_check == true){
+		if (string_literal_check == true){
+			rvs_standard_error(RVS_STRING_LITERAL_ERROR, NULL);
+			return false;
+		}
 		strcpy(rvs_variable_buffer->variable_type, "STR");
 	}
 
-	// Debug
-	printf("Variable Name : %s\n", rvs_variable_buffer->variable_name);
-	printf("Variable Data : %s\n", rvs_variable_buffer->variable_data);
-	printf("Variable Type : %s\n", rvs_variable_buffer->variable_type);
-
-	if (rvs_variable_name_check(rvs_variable_buffer, rvs_global_memory) == false){
+	if (rvs_variable_name_check(rvs_variable_buffer, rvs_global_memory, true) == false){
 		rvs_buffer_delete(rvs_variable_buffer);
 		return false;
 	}
@@ -164,12 +182,37 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 		return false;
 	}
 
-	// Debug
-	printf("\nGlobal Memory Variable Name : %s\n", rvs_global_memory->variable_names[rvs_global_memory->variable_iter - 1]);
-	printf("Global Memory Variable Data : %s\n", rvs_global_memory->variable_datas[rvs_global_memory->variable_iter - 1]);
-	printf("Global Memory Variable Type : %s\n", rvs_global_memory->variable_types[rvs_global_memory->variable_iter - 1]);
-
 	rvs_buffer_delete(rvs_variable_buffer);
+	return true;
+}
+
+
+// RevanScript (RVS) Output Function
+bool out(const char* const code_line, const RVSMEM* const rvs_global_memory){
+	RVSBUF* variable_buffer = rvs_buffer_create();
+	if (!variable_buffer) return false;
+
+	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
+		if (code_line[i] == ' ') continue;
+		variable_buffer->variable_name[variable_buffer->variable_name_counter++] = code_line[i];
+	}
+
+	variable_buffer->variable_name[variable_buffer->variable_name_counter] = '\0';
+	if (!rvs_variable_name_check(variable_buffer, NULL, false)) return false;
+
+	char* output_buffer = rvs_memory_get(rvs_global_memory, variable_buffer);
+
+	if (output_buffer != NULL){
+		rvs_standard_output(output_buffer);
+		return true;
+	}
+
+	else{
+		rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
+		return false;
+	}
+
+	rvs_buffer_delete(variable_buffer);
 	return true;
 }
 
@@ -234,6 +277,11 @@ bool keys(const char* const code_line, RVSMEM* rvs_global_memory){
 
 	else if (strncmp(code_line, "var ", 4) == 0){
 		if (!var(code_line + 4, rvs_global_memory)) return false;
+		return true;
+	}
+
+	else if (strncmp(code_line, "out ", 4) == 0){
+		if (!out(code_line + 4, rvs_global_memory)) return false;
 		return true;
 	}
 

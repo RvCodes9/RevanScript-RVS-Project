@@ -11,5 +11,4 @@ file(GLOB_RECURSE SOURCES "src/*.c")
 add_executable(RevanScript ${SOURCES})
 
 target_compile_options(RevanScript PRIVATE -O2)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
