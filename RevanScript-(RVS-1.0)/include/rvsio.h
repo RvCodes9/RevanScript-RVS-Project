@@ -34,6 +34,7 @@
 #define RVS_VARIABLE_NAME_LENGTH_ERROR                    "%s[RVSVariableNameLengthError] : The variable length must not exceed 30 characters!%s\n"
 #define RVS_VARIABLE_NAME_CHARACTER_ERROR                 "%s[RVSVariableNameCharacterError] : A variable name can consist of letters, numbers, and underscores!%s\n"
 #define RVS_VARIABLE_NAME_DUBLICATE_ERROR                 "%s[RVSVariableNameDublicateError] : The same variable name cannot be assigned to more than one variable!%s\n"
+#define RVS_VARIABLE_NO_DATA_ERROR                        "%s[RVSVariableNoDataError] : The variable has not been assigned a value!%s\n"
 
 
 void rvs_standard_output(const char*);

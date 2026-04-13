@@ -1,9 +1,7 @@
 ... RevanScript simple codes
 
-prt "\c4Hello, World!\b"
-prt "\c5\tStar"
-prt "\c6Beep\a"
+var text0 = "\c4Hello, World!"
+var text1 = "Game"
 
-end
-
-prt "Hello"
+out text0
+out text1

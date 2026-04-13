@@ -6,7 +6,7 @@
 // RevanScript Buffer Variable Standard Define
 #define RVS_BUFFER_VARIABLE_NAME_LENGHT 2048
 #define RVS_BUFFER_VARIABLE_DATA_LENGHT 2048
-#define RVS_BUFFER_VARIABLE_TYPE_LENGHT 4
+#define RVS_BUFFER_VARIABLE_TYPE_LENGHT 5
 
 
 // RevanScript Buffer Type

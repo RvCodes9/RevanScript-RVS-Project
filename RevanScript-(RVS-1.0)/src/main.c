@@ -164,9 +164,21 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter] = '\0';
 	rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter] = '\0';
 
-	if (string_type_check == true){
+	if (assignment_operation_check == false){
+		strcpy(rvs_variable_buffer->variable_data, "NULL");
+		strcpy(rvs_variable_buffer->variable_type, "NULL");
+	}
+
+	else if (assignment_operation_check == true && rvs_variable_buffer->variable_data[0] == '\0'){
+		rvs_standard_error(RVS_VARIABLE_NO_DATA_ERROR, NULL);
+		rvs_buffer_delete(rvs_variable_buffer);
+		return false;
+	}
+
+	else if (string_type_check == true){
 		if (string_literal_check == true){
 			rvs_standard_error(RVS_STRING_LITERAL_ERROR, NULL);
+			rvs_buffer_delete(rvs_variable_buffer);
 			return false;
 		}
 		strcpy(rvs_variable_buffer->variable_type, "STR");
@@ -350,10 +362,11 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 	else{
 		char* code_line = (char*) malloc(sizeof(char) * 2049);
 
-		while (!feof(file_open)){
+		while (true){
 			if (!fgets(code_line, 2048, file_open)){
 				free(code_line);
-				return false;
+				fclose(file_open);
+				return true;
 			}
 
 			else if (code_line[0] == '\0' || code_line[0] == '\n'){
@@ -362,12 +375,13 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 
 			else if (!keys(code_line, rvs_global_memory)){
 				free(code_line);
+				fclose(file_open);
 				return false;
 			}
 		}
 
-		fclose(file_open);
 		free(code_line);
+		fclose(file_open);
 		return true;
 	}
 }
