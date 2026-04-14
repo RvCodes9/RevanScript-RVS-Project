@@ -43,6 +43,10 @@
 
 		<Ctrl S>
 
+		> ./bin/RevanScript main.rvs
+		-- [Run Proccess] ---
+		Hello, World!
+
 
 	faylın içinə micro vəya vim kimi terminal editorlar istifadə edərək faylı aça bilərsiniz.
 	faylın içərisinə sadə bir kod yazırsınız.

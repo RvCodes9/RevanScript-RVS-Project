@@ -1,7 +1,9 @@
 ... RevanScript simple codes
 
-var text0 = "\c4Hello, World!"
+var text0 = "VARIABLE -- Hello, World!"
 var text1 = "Game"
+
+prt "DIRECT PRINT -- Hello, World!"
 
 out text0
 out text1

@@ -1,0 +1,38 @@
+body{
+    background-color: aqua;
+}
+
+h2{
+    text-align: center;
+}
+
+p{
+    margin-top: 50px;
+    text-align: center;
+}
+
+.rvs{
+    display: block;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.images{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 75px;
+    margin-top: 50px;
+}
+
+.images img{
+    width: 75px;
+}
+
+.images a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: black;
+}

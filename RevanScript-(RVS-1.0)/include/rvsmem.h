@@ -23,6 +23,7 @@ typedef struct{
     char** variable_names;
     char** variable_datas;
     char** variable_types;
+    bool* variable_consts;
     bool* variable_ctrls;
     size_t variable_iter;
     size_t memory_size;
@@ -32,7 +33,7 @@ typedef struct{
 // RevanScript (RVS) Memory Functions
 RVSMEM* rvs_memory_create(void);
 bool rvs_memory_insert(RVSMEM*, const RVSBUF*);
-bool rvs_memory_check(const RVSMEM*, const RVSBUF*, char);
+bool rvs_memory_check(const RVSMEM*, const RVSBUF*);
 char* rvs_memory_get(const RVSMEM*, const RVSBUF*);
 void rvs_memory_delete(RVSMEM*);
 

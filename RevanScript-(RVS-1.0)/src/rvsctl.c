@@ -44,7 +44,7 @@ bool rvs_variable_name_check(const RVSBUF* const rvs_buffer, const RVSMEM* const
     }
 
     if (create_type == true){
-        if (rvs_memory_check(rvs_memory, rvs_buffer, 'N') == true){
+        if (rvs_memory_check(rvs_memory, rvs_buffer) == true){
             rvs_standard_error(RVS_VARIABLE_NAME_DUBLICATE_ERROR, NULL);
             return false;
         }

@@ -45,6 +45,14 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
         return false;
     }
 
+    bool* variables_consts = (bool*) realloc(rvs_memory->variable_consts, sizeof(bool) * rvs_new_memory_size);
+    if (!variables_consts){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory Realloc.");
+        }
+        return false;
+    }
+
     // Allocate Memory
     for (size_t i = rvs_memory->memory_size; i < rvs_new_memory_size; i++){
 
@@ -94,11 +102,13 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
     rvs_memory->variable_ctrls = variables_ctrls;
     for (size_t i = rvs_memory->memory_size; i < rvs_new_memory_size; i++){
         rvs_memory->variable_ctrls[i] = false;
+        rvs_memory->variable_consts[i] = false;
     }
 
     rvs_memory->variable_names = variables_names;
     rvs_memory->variable_datas = variables_datas;
     rvs_memory->variable_types = variables_types;
+    rvs_memory->variable_consts = variables_consts;
 
     rvs_memory->memory_size *= 2;
 
@@ -147,13 +157,26 @@ RVSMEM* rvs_memory_create(void){
 
     rvs_memory->variable_types = (char**) malloc(sizeof(char*) * RVS_MEMORY_DEFAULT_SIZE);
     if (!rvs_memory->variable_types){
+        if (RVS_MEMORY_DEBUGGER_MODE == true){
+            rvs_standard_debug(false, "Memory create.");
+        }
         free(rvs_memory->variable_ctrls);
         free(rvs_memory->variable_names);
         free(rvs_memory->variable_datas);
         free(rvs_memory);
+        return NULL;
+    }
+
+    rvs_memory->variable_consts = (bool*) malloc(sizeof(bool) * RVS_MEMORY_DEFAULT_SIZE);
+    if (!rvs_memory->variable_consts){
         if (RVS_MEMORY_DEBUGGER_MODE == true){
             rvs_standard_debug(false, "Memory create.");
         }
+        free(rvs_memory->variable_ctrls);
+        free(rvs_memory->variable_names);
+        free(rvs_memory->variable_datas);
+        free(rvs_memory->variable_types);
+        free(rvs_memory);
         return NULL;
     }
 
@@ -171,6 +194,7 @@ RVSMEM* rvs_memory_create(void){
             free(rvs_memory->variable_names);
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
+            free(rvs_memory->variable_consts);
             free(rvs_memory);
             if (RVS_MEMORY_DEBUGGER_MODE == true){
                 rvs_standard_debug(false, "Memory create.");
@@ -191,6 +215,7 @@ RVSMEM* rvs_memory_create(void){
             free(rvs_memory->variable_names);
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
+            free(rvs_memory->variable_consts);
             free(rvs_memory);
             if (RVS_MEMORY_DEBUGGER_MODE == true){
                 rvs_standard_debug(false, "Memory create.");
@@ -211,6 +236,7 @@ RVSMEM* rvs_memory_create(void){
             free(rvs_memory->variable_names);
             free(rvs_memory->variable_datas);
             free(rvs_memory->variable_types);
+            free(rvs_memory->variable_consts);
             free(rvs_memory);
             if (RVS_MEMORY_DEBUGGER_MODE == true){
                 rvs_standard_debug(false, "Memory create.");
@@ -222,6 +248,7 @@ RVSMEM* rvs_memory_create(void){
 
     for (size_t i = 0; i < RVS_MEMORY_DEFAULT_SIZE; i++){
         rvs_memory->variable_ctrls[i] = false;
+        rvs_memory->variable_consts[i] = false;
     }
 
     rvs_memory->variable_iter = 0;
@@ -271,12 +298,10 @@ bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
 
 
 // RevanScript (RVS) Memory (RVSMEM) Check / Variable Name Check Function
-bool rvs_memory_check(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buffer, char type){
-    if (type == 'N'){
-        for (size_t i = 0; i < rvs_memory->memory_size; i++){
-            if (strcmp(rvs_memory->variable_names[i], rvs_buffer->variable_name) == 0){
-                return true;
-            }
+bool rvs_memory_check(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buffer){
+    for (size_t i = 0; i < rvs_memory->memory_size; i++){
+        if (strcmp(rvs_memory->variable_names[i], rvs_buffer->variable_name) == 0){
+            return true;
         }
     }
     return false;
@@ -305,5 +330,6 @@ void rvs_memory_delete(RVSMEM* rvs_memory){
     free(rvs_memory->variable_names);
     free(rvs_memory->variable_datas);
     free(rvs_memory->variable_types);
+    free(rvs_memory->variable_consts);
     free(rvs_memory);
 }
