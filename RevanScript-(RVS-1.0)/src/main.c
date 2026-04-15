@@ -116,38 +116,45 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	RVSBUF* rvs_variable_buffer = rvs_buffer_create();
 	if (!rvs_variable_buffer) return false;
 
-	bool string_type_check = false;
+	RVSTYPE rvs_variable_types;
+	rvs_variable_types.string_type_check = false;
+	rvs_variable_types.integer_type_check = false;
+	rvs_variable_types.float_type_check = false;
+	rvs_variable_types.boolean_type_check = false;
+	rvs_variable_types.binary_type_check = false;
 
-	bool assignment_operation_check = false;
-	bool string_literal_check = false;
+	RVSLOGIC rvs_variable_logic;
+	rvs_variable_logic.assignment_operation_check = false;
+	rvs_variable_logic.string_literal_check = false;
+
 
 	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
 		if (code_line[i] == '='){
-			if (assignment_operation_check == false){
-				assignment_operation_check = true;
+			if (rvs_variable_logic.assignment_operation_check == false){
+				rvs_variable_logic.assignment_operation_check = true;
 			}
 		}
 
-		else if (assignment_operation_check == false){
+		else if (rvs_variable_logic.assignment_operation_check == false){
 			if (code_line[i] == ' ') continue;
 			rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter++] = code_line[i];
 		}
 
-		else if (assignment_operation_check == true){
+		else if (rvs_variable_logic.assignment_operation_check == true){
 			if (code_line[i] == '\"'){
-				if (string_literal_check == false){
-					string_literal_check = true;
-					if (string_type_check == false){
-						string_type_check = true;
+				if (rvs_variable_logic.string_literal_check == false){
+					rvs_variable_logic.string_literal_check = true;
+					if (rvs_variable_types.string_type_check == false){
+						rvs_variable_types.string_type_check = true;
 					}
 				}
 
 				else{
-					string_literal_check = false;
+					rvs_variable_logic.string_literal_check = false;
 				}
 			}
 
-			else if (string_literal_check == true){
+			else if (rvs_variable_logic.string_literal_check == true){
 				if (code_line[i] == '\\' && code_line[i + 1] == '\\'){
 					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = '\\';
 					++i;
@@ -168,31 +175,31 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter] = '\0';
 	rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter] = '\0';
 
-	if (assignment_operation_check == false){
-		strcpy(rvs_variable_buffer->variable_data, "NULL");
-		strcpy(rvs_variable_buffer->variable_type, "NULL");
-	}
-
-	else if (assignment_operation_check == true && rvs_variable_buffer->variable_data[0] == '\0'){
-		rvs_standard_error(RVS_VARIABLE_NO_DATA_ERROR, NULL);
-		rvs_buffer_delete(rvs_variable_buffer);
-		return false;
-	}
-
-	else if (string_type_check == true){
-		if (string_literal_check == true){
-			rvs_standard_error(RVS_STRING_LITERAL_ERROR, NULL);
-			rvs_buffer_delete(rvs_variable_buffer);
-			return false;
-		}
-		strcpy(rvs_variable_buffer->variable_type, "STR");
-	}
-
+	// RevanScript Buffer "Variable Name" Checking
 	if (rvs_variable_name_check(rvs_variable_buffer, rvs_global_memory, true) == false){
 		rvs_buffer_delete(rvs_variable_buffer);
 		return false;
 	}
 
+	// RevanScript automatic NULL data
+	if (rvs_variable_logic.assignment_operation_check == false){
+		strcpy(rvs_variable_buffer->variable_data, "NULL");
+		strcpy(rvs_variable_buffer->variable_type, "NULL");
+	}
+
+	else{
+		// RevanScript Buffer "Variable Data" Checking
+		if (rvs_variable_data_check(rvs_variable_buffer, &rvs_variable_types, &rvs_variable_logic) == false){
+			rvs_buffer_delete(rvs_variable_buffer);
+			return false;
+		}
+
+		if (rvs_variable_types.string_type_check == true){
+			strcpy(rvs_variable_buffer->variable_type, "STR");
+		}
+	}
+
+	// RevanScript Insert Memory
 	if (rvs_memory_insert(rvs_global_memory, rvs_variable_buffer) == false){
 		rvs_buffer_delete(rvs_variable_buffer);
 		return false;

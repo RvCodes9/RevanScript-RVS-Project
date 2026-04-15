@@ -315,7 +315,6 @@ char* rvs_memory_get(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buf
             return rvs_memory->variable_datas[i];
         }
     }
-
     return NULL;
 }
 
