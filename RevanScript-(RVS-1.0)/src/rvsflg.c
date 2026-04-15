@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdint.h>
@@ -31,6 +32,13 @@ void rvs_flag_about(void){
 }
 
 
+bool rvs_flag_documentation(void){
+    if (!system("xdg-open https://rvcodes9.github.io/RevanScript-RVS-Documetation-Site/")){
+        return false;
+    }
+}
+
+
 uint8_t rvs_flag_title_check(const char* const flag_title){
     if (strcmp(flag_title, "-V") == 0 || strcmp(flag_title, "--version") == 0){
         rvs_flag_version();
@@ -39,6 +47,11 @@ uint8_t rvs_flag_title_check(const char* const flag_title){
 
     else if (strcmp(flag_title, "-A") == 0 || strcmp(flag_title, "--about") == 0){
         rvs_flag_about();
+        return 0;
+    }
+
+    else if (strcmp(flag_title, "-D") == 0 || strcmp(flag_title, "--documentation") == 0){
+        if (!rvs_flag_documentation()) return 1;
         return 0;
     }
 
