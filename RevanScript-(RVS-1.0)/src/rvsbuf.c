@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "../include/rvsbuf.h"
 
@@ -32,6 +33,7 @@ RVSBUF* rvs_buffer_create(void){
     rvs_buffer->variable_data[0] = '\0';
     rvs_buffer->variable_type[0] = '\0';
 
+    rvs_buffer->variable_const = false;
     rvs_buffer->variable_name_counter = 0;
     rvs_buffer->variable_data_counter = 0;
 

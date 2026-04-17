@@ -267,6 +267,7 @@ bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
     strcpy(rvs_memory->variable_names[rvs_memory->variable_iter], rvs_buffer->variable_name);
 	strcpy(rvs_memory->variable_datas[rvs_memory->variable_iter], rvs_buffer->variable_data);
 	strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], rvs_buffer->variable_type);
+    rvs_memory->variable_consts[rvs_memory->variable_iter] = rvs_buffer->variable_const;
 
     if (rvs_memory->variable_iter < rvs_memory->memory_size - 1){
         rvs_memory->variable_iter++;

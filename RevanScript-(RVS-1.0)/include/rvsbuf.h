@@ -2,6 +2,7 @@
 #define RVSBUF_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 // RevanScript Buffer Variable Standard Define
 #define RVS_BUFFER_VARIABLE_NAME_LENGHT 2048
@@ -14,6 +15,7 @@ typedef struct{
     char* variable_name;
     char* variable_data;
     char* variable_type;
+    bool variable_const;
     size_t variable_name_counter;
     size_t variable_data_counter;
 } RVSBUF;

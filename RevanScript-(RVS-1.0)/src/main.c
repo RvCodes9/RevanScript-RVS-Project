@@ -10,6 +10,8 @@
 	--------------------------------------------
 	C Source Codes  |  C1999 / C99 Standard | Compiler -> GNU Compiler Collections (GCC)
 	automatic compile file -> executable.sh
+	--------------------------------------------
+	Cmake Compile Support
 */
 
 /*
@@ -181,6 +183,11 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 		return false;
 	}
 
+	// RevanScript "Constant Variable" Define
+	if (rvs_variable_buffer->variable_name[0] == '_'){
+		rvs_variable_buffer->variable_const = true;
+	}
+
 	// RevanScript automatic NULL data
 	if (rvs_variable_logic.assignment_operation_check == false){
 		strcpy(rvs_variable_buffer->variable_data, "NULL");
@@ -295,7 +302,7 @@ bool prt(const char* const code_line){
 
 
 // RevanScript (RVS) Keyword Search Function
-bool keys(const char* const code_line, RVSMEM* rvs_global_memory){
+bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_proccess_check){
 	if (strncmp(code_line, "...", 3) == 0){
 		return true;
 	}
@@ -316,7 +323,7 @@ bool keys(const char* const code_line, RVSMEM* rvs_global_memory){
 	}
 
 	else if (strncmp(code_line, "end", 3) == 0){
-		exit(0);
+		*end_proccess_check = true;
 		return true;
 	}
 	
@@ -336,6 +343,8 @@ bool repl(RVSMEM* rvs_global_memory){
 	char* code_line = (char*) malloc(sizeof(char) * 2049);
 	if (!code_line) return false;
 
+	bool end_proccess_check = false;
+
 	printf("\n%s%s%s\n\n", RVS_COLOR_YELLOW, RVS_REPL_MESSAGE, RVS_COLOR_RESET);
 
 	while (true){
@@ -350,9 +359,14 @@ bool repl(RVSMEM* rvs_global_memory){
 			continue;
 		}
 
-		else if (!keys(code_line, rvs_global_memory)){
+		else if (!keys(code_line, rvs_global_memory, &end_proccess_check)){
 			free(code_line);
 			return false;
+		}
+
+		else if (end_proccess_check == true){
+			free(code_line);
+			return true;
 		}
 	}
 
@@ -372,6 +386,12 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 
 	else{
 		char* code_line = (char*) malloc(sizeof(char) * 2049);
+		if (!code_line){
+			fclose(file_open);
+			return false;
+		}
+
+		bool end_proccess_check = false;
 
 		while (true){
 			if (!fgets(code_line, 2048, file_open)){
@@ -384,10 +404,16 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 				continue;
 			}
 
-			else if (!keys(code_line, rvs_global_memory)){
+			else if (!keys(code_line, rvs_global_memory, &end_proccess_check)){
 				free(code_line);
 				fclose(file_open);
 				return false;
+			}
+
+			else if (end_proccess_check == true){
+				free(code_line);
+				fclose(file_open);
+				return true;
 			}
 		}
 
