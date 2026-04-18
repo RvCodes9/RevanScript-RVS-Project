@@ -1,7 +1,7 @@
 # RevanScript-RVS-Project
  RevanScript-Interpreter
 
-RevanScript (RVS) Direct Execution Interpreter model
+RevanScript (RVS) Direct Execution Interpreter Model
 
 +---------------------------------------+
 |--< RevanScript (RVS) Documentation >--| 
