@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 #include <stdbool.h>
@@ -36,6 +37,14 @@ void rvs_standard_output(const char* const data){
         else if (data_length >= i + 3 && data[i + 1] == '\\' && data[i + 2] == 'b'){
             i += 3;
         }
+
+        // Display Clear (\cl)
+        else if (data_length >= i + 3 && data[i] == '\\' && data[i + 1] == 'c' && data[i + 2] == 'l'){
+            if (!system("clear")){
+                return;
+            }
+            i += 3;
+        }
         
         // Color Escape Sequances
         else if (data_length >= i + 3 && data[i] == '\\' && data[i + 1] == 'c'){
@@ -49,6 +58,22 @@ void rvs_standard_output(const char* const data){
                 case '6': printf("%s", RVS_COLOR_MAGENTA); i += 3; break;
                 case '7': printf("%s", RVS_COLOR_CYAN);    i += 3; break;
                 case '8': printf("%s", RVS_COLOR_WHITE);   i += 3; break;
+            }
+        }
+
+        // Emoji Escape Sequances
+        else if (data_length >= i + 3 && data[i] == '\\' && data[i + 1] == 'e'){
+            switch (data[i + 2]){
+                case '0': printf("😀"); i += 3; break;
+                case '1': printf("😄"); i += 3; break;
+                case '2': printf("😁"); i += 3; break;
+                case '3': printf("😅"); i += 3; break;
+                case '4': printf("😂"); i += 3; break;
+                case '5': printf("😍"); i += 3; break;
+                case '6': printf("🤩"); i += 3; break;
+                case '7': printf("🤔"); i += 3; break;
+                case '8': printf("😵"); i += 3; break;
+                case '9': printf("🥱"); i += 3; break;
             }
         }
 

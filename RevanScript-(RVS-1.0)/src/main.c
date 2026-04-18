@@ -118,13 +118,6 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	RVSBUF* rvs_variable_buffer = rvs_buffer_create();
 	if (!rvs_variable_buffer) return false;
 
-	RVSTYPE rvs_variable_types;
-	rvs_variable_types.string_type_check = false;
-	rvs_variable_types.integer_type_check = false;
-	rvs_variable_types.float_type_check = false;
-	rvs_variable_types.boolean_type_check = false;
-	rvs_variable_types.binary_type_check = false;
-
 	RVSLOGIC rvs_variable_logic;
 	rvs_variable_logic.assignment_operation_check = false;
 	rvs_variable_logic.string_literal_check = false;
@@ -143,11 +136,13 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 		}
 
 		else if (rvs_variable_logic.assignment_operation_check == true){
+
+			// String Data Literal (Open / Close) System
 			if (code_line[i] == '\"'){
 				if (rvs_variable_logic.string_literal_check == false){
 					rvs_variable_logic.string_literal_check = true;
-					if (rvs_variable_types.string_type_check == false){
-						rvs_variable_types.string_type_check = true;
+					if (rvs_variable_buffer->variable_type == RVS_UNDEFINED_TYPE){
+						rvs_variable_buffer->variable_type = RVS_STRING_TYPE;
 					}
 				}
 
@@ -156,6 +151,7 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 				}
 			}
 
+			// String Data Buffer write
 			else if (rvs_variable_logic.string_literal_check == true){
 				if (code_line[i] == '\\' && code_line[i + 1] == '\\'){
 					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = '\\';
@@ -191,18 +187,14 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	// RevanScript automatic NULL data
 	if (rvs_variable_logic.assignment_operation_check == false){
 		strcpy(rvs_variable_buffer->variable_data, "NULL");
-		strcpy(rvs_variable_buffer->variable_type, "NULL");
+		rvs_variable_buffer->variable_type = RVS_NULL_TYPE;
 	}
 
 	else{
 		// RevanScript Buffer "Variable Data" Checking
-		if (rvs_variable_data_check(rvs_variable_buffer, &rvs_variable_types, &rvs_variable_logic) == false){
+		if (rvs_variable_data_check(rvs_variable_buffer, &rvs_variable_logic) == false){
 			rvs_buffer_delete(rvs_variable_buffer);
 			return false;
-		}
-
-		if (rvs_variable_types.string_type_check == true){
-			strcpy(rvs_variable_buffer->variable_type, "STR");
 		}
 	}
 

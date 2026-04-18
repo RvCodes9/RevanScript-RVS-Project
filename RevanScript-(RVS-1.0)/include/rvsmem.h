@@ -15,7 +15,7 @@
 // RevanScript Memory Variable Standard Define
 #define RVS_MEMORY_VARIABLE_NAME_LENGTH 31
 #define RVS_MEMORY_VARIABLE_DATA_LENGTH 2048
-#define RVS_MEMORY_VARIABLE_TYPE_LENGTH 4
+#define RVS_MEMORY_VARIABLE_TYPE_LENGTH 5
 
 
 // RevanScript Memory Type

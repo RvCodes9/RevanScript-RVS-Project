@@ -10,11 +10,22 @@
 #define RVS_BUFFER_VARIABLE_TYPE_LENGHT 5
 
 
+enum{
+    RVS_UNDEFINED_TYPE = 0,
+    RVS_STRING_TYPE,
+    RVS_INTEGER_TYPE,
+    RVS_FLOAT_TYPE,
+    RVS_BOOLEAN_TYPE,
+    RVS_BINARY_TYPE,
+    RVS_NULL_TYPE
+};
+
+
 // RevanScript Buffer Type
 typedef struct{
     char* variable_name;
     char* variable_data;
-    char* variable_type;
+    unsigned short variable_type;
     bool variable_const;
     size_t variable_name_counter;
     size_t variable_data_counter;

@@ -264,9 +264,22 @@ RVSMEM* rvs_memory_create(void){
 
 // RevanScript (RVS) Memory (RVSMEM) Insert Function
 bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
+    
+    // Variable Name and Data Write Memory
     strcpy(rvs_memory->variable_names[rvs_memory->variable_iter], rvs_buffer->variable_name);
 	strcpy(rvs_memory->variable_datas[rvs_memory->variable_iter], rvs_buffer->variable_data);
-	strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], rvs_buffer->variable_type);
+    
+    // Variable Type Write Memory
+    switch (rvs_buffer->variable_type){
+        case RVS_STRING_TYPE:   strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "STR");   break;
+        case RVS_INTEGER_TYPE:  strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "INT");   break;
+        case RVS_FLOAT_TYPE:    strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "FLT");   break;
+        case RVS_BOOLEAN_TYPE:  strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "BLN");   break;
+        case RVS_BINARY_TYPE:   strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "BIN");   break;
+        case RVS_NULL_TYPE:     strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "NULL");  break;
+    }
+
+    // Variable Constant
     rvs_memory->variable_consts[rvs_memory->variable_iter] = rvs_buffer->variable_const;
 
     if (rvs_memory->variable_iter < rvs_memory->memory_size - 1){
@@ -327,6 +340,7 @@ void rvs_memory_delete(RVSMEM* rvs_memory){
         free(rvs_memory->variable_datas[i]);
         free(rvs_memory->variable_types[i]);
     }
+    free(rvs_memory->variable_ctrls);
     free(rvs_memory->variable_names);
     free(rvs_memory->variable_datas);
     free(rvs_memory->variable_types);

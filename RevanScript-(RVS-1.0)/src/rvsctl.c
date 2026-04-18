@@ -56,14 +56,14 @@ bool rvs_variable_name_check(const RVSBUF* const rvs_buffer, const RVSMEM* const
 }
 
 
-bool rvs_variable_data_check(const RVSBUF* const rvs_variable_buffer, const RVSTYPE* const rvs_variable_types, const RVSLOGIC* const rvs_variable_logic){
+bool rvs_variable_data_check(const RVSBUF* const rvs_variable_buffer, const RVSLOGIC* const rvs_variable_logic){
 
     if (rvs_variable_logic->assignment_operation_check == true && rvs_variable_buffer->variable_data[0] == '\0'){
 		rvs_standard_error(RVS_VARIABLE_NO_DATA_ERROR, NULL);
 		return false;
 	}
 
-	else if (rvs_variable_types->string_type_check == true){
+	else if (rvs_variable_buffer->variable_type == RVS_STRING_TYPE){
 		if (rvs_variable_logic->string_literal_check == true){
 			rvs_standard_error(RVS_STRING_LITERAL_ERROR, NULL);
 			return false;
