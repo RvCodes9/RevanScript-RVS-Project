@@ -1,0 +1,22 @@
+... RevanScript Test Codes
+
+var string_data = "Hello, World!"
+out string_data
+
+var integer_number = 150
+out integer_number
+
+var float_number = 5.7
+out float_number
+
+var boolean_data0 = TRUE
+out boolean_data0
+
+var boolean_data1 = FALSE
+out boolean_data1
+
+var null_data0 = NULL
+out null_data0
+
+var null_data1
+out null_data1

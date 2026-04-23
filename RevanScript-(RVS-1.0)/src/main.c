@@ -8,7 +8,7 @@
 	RevanScript (RVS) Programming Language
 	RevanScript (RVS) Interpreter Program (Direct Execution Model)
 	--------------------------------------------
-	C Source Codes  |  C1999 / C99 Standard | Compiler -> GNU Compiler Collections (GCC)
+	C Source Codes  |  C1999 / C99 Standard | Compiler -> GNU Compiler Collection (GCC)
 	automatic compile file -> executable.sh
 	--------------------------------------------
 	Cmake Compile Support
@@ -46,7 +46,7 @@
 		<Ctrl S>
 
 		> ./bin/RevanScript main.rvs
-		-- [Run Proccess] ---
+		<interpreter> --- [Run Process] --- <runtime>
 		Hello, World!
 
 
@@ -81,10 +81,10 @@
 	C proqramlaşdırma dilini bilmək lazım gələcək.
 	    Dəyişənlər və dəyərlər.
 		Məlumat tipləri (char, int, float, double, unsigned, signed) 
-		typedef olunmuş C məlumat tipləri məslən size_t kimi tiplər.
-		Sabitlər (const) bilmək lazımdır.
-		Şərtlər və dövrlər də çox önəmlidir.
-		Ən önəmlisi göstəricilər (Pointer) ləri ən azından orta səviyyədə bilmək.
+		typedef olunmuş C məlumat tipləri məslən size_t, int8_t, uint8_t (stdint.h, stddef.h) vs s.
+		Sabitlər (const) bilçox önəmlidir.
+		Ən önəmlisi göstəricilmək lazımdır.
+		Şərtlər və dövrlər də ər (Pointer) ləri ən azından orta səviyyədə bilmək.
 		Funksiyalar (Function) lar və Function Pointerlə işləmək bacarığı olmalıdır.
 		Compile Time əməliyyatları bilmək önəmlidir. (#include, #define, #ifdef, #ifndef, #endif)
 		Struct lar və Union kimi detalları bilmək lazım gələcək irəlidə.
@@ -121,20 +121,24 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	RVSLOGIC rvs_variable_logic;
 	rvs_variable_logic.assignment_operation_check = false;
 	rvs_variable_logic.string_literal_check = false;
-
+	rvs_variable_logic.binary_start_operation_check = false;
 
 	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
+
+		// Assignment Operator
 		if (code_line[i] == '='){
 			if (rvs_variable_logic.assignment_operation_check == false){
 				rvs_variable_logic.assignment_operation_check = true;
 			}
 		}
 
+		// Variable Name
 		else if (rvs_variable_logic.assignment_operation_check == false){
 			if (code_line[i] == ' ') continue;
 			rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter++] = code_line[i];
 		}
 
+		// Variable Data 
 		else if (rvs_variable_logic.assignment_operation_check == true){
 
 			// String Data Literal (Open / Close) System
@@ -148,6 +152,17 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 
 				else{
 					rvs_variable_logic.string_literal_check = false;
+					break;
+				}
+			}
+
+			// Binary Type (Open) System
+ 			else if (rvs_variable_logic.string_literal_check == false && code_line[i] == 'b'){
+				if (rvs_variable_logic.binary_start_operation_check == false){
+					rvs_variable_logic.binary_start_operation_check = true;
+					if (rvs_variable_buffer->variable_type == RVS_UNDEFINED_TYPE){
+						rvs_variable_buffer->variable_type = RVS_BINARY_TYPE;
+					}
 				}
 			}
 
@@ -167,6 +182,12 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
 				}
 			}
+
+			// Boolean, Integer, Float, Binary and NULL Types Parsing
+			else{
+				if (code_line[i] == ' ') continue;
+				rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
+			}
 		}
 	}
 
@@ -182,6 +203,12 @@ bool var(const char* const code_line, RVSMEM* rvs_global_memory){
 	// RevanScript "Constant Variable" Define
 	if (rvs_variable_buffer->variable_name[0] == '_'){
 		rvs_variable_buffer->variable_const = true;
+	}
+
+	// RevanScript Binary Type Default Data
+	if (strlen(rvs_variable_buffer->variable_data) == 0){
+		strcpy(rvs_variable_buffer->variable_data, "00000000");
+		rvs_variable_buffer->variable_data[8] = '\0';
 	}
 
 	// RevanScript automatic NULL data
@@ -294,7 +321,7 @@ bool prt(const char* const code_line){
 
 
 // RevanScript (RVS) Keyword Search Function
-bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_proccess_check){
+bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_process_check){
 	if (strncmp(code_line, "...", 3) == 0){
 		return true;
 	}
@@ -315,7 +342,7 @@ bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_proc
 	}
 
 	else if (strncmp(code_line, "end", 3) == 0){
-		*end_proccess_check = true;
+		*end_process_check = true;
 		return true;
 	}
 	
@@ -323,6 +350,7 @@ bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_proc
 		char* keyword_name = (char*) malloc(sizeof(char) * 5);
 		if (!keyword_name) return false;
 		strncpy(keyword_name, code_line, 4);
+		keyword_name[strlen(keyword_name) - 1] = '\0';
 		rvs_standard_error(RVS_KEYWORD_NAME_ERROR, keyword_name);
 		free(keyword_name);
 		return false;
@@ -335,7 +363,7 @@ bool repl(RVSMEM* rvs_global_memory){
 	char* code_line = (char*) malloc(sizeof(char) * 2049);
 	if (!code_line) return false;
 
-	bool end_proccess_check = false;
+	bool end_process_check = false;
 
 	printf("\n%s%s%s\n\n", RVS_COLOR_YELLOW, RVS_REPL_MESSAGE, RVS_COLOR_RESET);
 
@@ -351,12 +379,12 @@ bool repl(RVSMEM* rvs_global_memory){
 			continue;
 		}
 
-		else if (!keys(code_line, rvs_global_memory, &end_proccess_check)){
+		else if (!keys(code_line, rvs_global_memory, &end_process_check)){
 			free(code_line);
 			return false;
 		}
 
-		else if (end_proccess_check == true){
+		else if (end_process_check == true){
 			free(code_line);
 			return true;
 		}
@@ -383,7 +411,7 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 			return false;
 		}
 
-		bool end_proccess_check = false;
+		bool end_process_check = false;
 
 		while (true){
 			if (!fgets(code_line, 2048, file_open)){
@@ -396,13 +424,13 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 				continue;
 			}
 
-			else if (!keys(code_line, rvs_global_memory, &end_proccess_check)){
+			else if (!keys(code_line, rvs_global_memory, &end_process_check)){
 				free(code_line);
 				fclose(file_open);
 				return false;
 			}
 
-			else if (end_proccess_check == true){
+			else if (end_process_check == true){
 				free(code_line);
 				fclose(file_open);
 				return true;

@@ -1,4 +1,4 @@
-... RevanScript simple codes
+... RevanScript simple test codes
 
 var text0 = "VARIABLE -- Hello, World!"
 var text1 = "Game"

@@ -10,13 +10,14 @@
 typedef struct{
     bool assignment_operation_check;
 	bool string_literal_check;
+    bool binary_start_operation_check;
 } RVSLOGIC;
 
 
 // Checking Functions
 bool rvs_file_type_check(const char*);
 bool rvs_variable_name_check(const RVSBUF*, const RVSMEM*, bool);
-bool rvs_variable_data_check(const RVSBUF*, const RVSLOGIC*);
+bool rvs_variable_data_check(RVSBUF*, const RVSLOGIC*);
 
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
+
 
 // RevanScript Buffer Variable Standard Define
 #define RVS_BUFFER_VARIABLE_NAME_LENGHT 2048
@@ -10,6 +12,7 @@
 #define RVS_BUFFER_VARIABLE_TYPE_LENGHT 5
 
 
+// RevanScript Main Data Types
 enum{
     RVS_UNDEFINED_TYPE = 0,
     RVS_STRING_TYPE,
@@ -25,7 +28,7 @@ enum{
 typedef struct{
     char* variable_name;
     char* variable_data;
-    unsigned short variable_type;
+    uint8_t variable_type;
     bool variable_const;
     size_t variable_name_counter;
     size_t variable_data_counter;

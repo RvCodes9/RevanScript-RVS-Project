@@ -1,0 +1,7 @@
+... RevanScript Programming Language Test Codes
+
+var text = "\c4Hello, World!"
+out text
+
+var text2
+out text2
