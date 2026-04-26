@@ -1,0 +1,7 @@
+... RevanScript Programming Language
+
+var text
+prt "\c4Keyboard Input : " 
+inp text
+out text
+prt "\n"

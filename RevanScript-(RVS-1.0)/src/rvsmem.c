@@ -120,6 +120,21 @@ bool _rvs_memory_realloc(RVSMEM* rvs_memory){
 }
 
 
+// RevanScript Memory (RVSMEM) Type Define
+void _rvs_memory_type_define(RVSMEM* rvs_memory, const RVSBUF* const rvs_buffer){
+
+    // Variable Type Write Memory
+    switch (rvs_buffer->variable_type){
+        case RVS_STRING_TYPE:   strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "STR");   break;
+        case RVS_INTEGER_TYPE:  strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "INT");   break;
+        case RVS_FLOAT_TYPE:    strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "FLT");   break;
+        case RVS_BOOLEAN_TYPE:  strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "BLN");   break;
+        case RVS_BINARY_TYPE:   strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "BIN");   break;
+        case RVS_NULL_TYPE:     strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "NULL");  break;
+    }
+}
+
+
 // RevanScript Memory (RVSMEM) Create Function
 RVSMEM* rvs_memory_create(void){
     RVSMEM* rvs_memory = (RVSMEM*) malloc(sizeof(RVSMEM));
@@ -269,15 +284,7 @@ bool rvs_memory_insert(RVSMEM* rvs_memory ,const RVSBUF const* rvs_buffer){
     strcpy(rvs_memory->variable_names[rvs_memory->variable_iter], rvs_buffer->variable_name);
 	strcpy(rvs_memory->variable_datas[rvs_memory->variable_iter], rvs_buffer->variable_data);
     
-    // Variable Type Write Memory
-    switch (rvs_buffer->variable_type){
-        case RVS_STRING_TYPE:   strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "STR");   break;
-        case RVS_INTEGER_TYPE:  strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "INT");   break;
-        case RVS_FLOAT_TYPE:    strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "FLT");   break;
-        case RVS_BOOLEAN_TYPE:  strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "BLN");   break;
-        case RVS_BINARY_TYPE:   strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "BIN");   break;
-        case RVS_NULL_TYPE:     strcpy(rvs_memory->variable_types[rvs_memory->variable_iter], "NULL");  break;
-    }
+    _rvs_memory_type_define(rvs_memory, rvs_buffer);
 
     // Variable Constant
     rvs_memory->variable_consts[rvs_memory->variable_iter] = rvs_buffer->variable_const;
@@ -330,6 +337,27 @@ char* rvs_memory_get(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buf
         }
     }
     return NULL;
+}
+
+
+// RevanScript (RVS) Memory (RVSMEM) Set Function
+bool rvs_memory_set(RVSMEM* rvs_memory, const RVSBUF* const rvs_buffer){
+    for (size_t i = 0; i < rvs_memory->memory_size; i++){
+        if (strcmp(rvs_memory->variable_names[i], rvs_buffer->variable_name) == 0){
+            if (rvs_memory->variable_consts[i] == false){
+                strcpy(rvs_memory->variable_datas[i], rvs_buffer->variable_data);
+                _rvs_memory_type_define(rvs_memory, rvs_buffer);
+                return true;
+            }
+
+            else{
+                rvs_standard_error(RVS_VARIABLE_CONSTANT_ERROR, NULL);
+                return false;
+            }
+        }
+    }
+    rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
+    return false;
 }
 
 

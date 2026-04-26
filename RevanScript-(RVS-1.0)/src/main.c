@@ -74,26 +74,7 @@
 
 	Birdə daha çox tip əlavə etməyi düşünürəm.
 
-	String, Integer, Float, Boolean, Chracter, Object, Binary
-
-	dəstək verə bilmək üçün tələblər : ---
-
-	C proqramlaşdırma dilini bilmək lazım gələcək.
-	    Dəyişənlər və dəyərlər.
-		Məlumat tipləri (char, int, float, double, unsigned, signed) 
-		typedef olunmuş C məlumat tipləri məslən size_t, int8_t, uint8_t (stdint.h, stddef.h) vs s.
-		Sabitlər (const) bilçox önəmlidir.
-		Ən önəmlisi göstəricilmək lazımdır.
-		Şərtlər və dövrlər də ər (Pointer) ləri ən azından orta səviyyədə bilmək.
-		Funksiyalar (Function) lar və Function Pointerlə işləmək bacarığı olmalıdır.
-		Compile Time əməliyyatları bilmək önəmlidir. (#include, #define, #ifdef, #ifndef, #endif)
-		Struct lar və Union kimi detalları bilmək lazım gələcək irəlidə.
-		Kitabxana biliyədə mütləqdir C nin Standard Library lərin tanımaq lazım gələcək.
-		Məsələn (stdio.h, stdlib.h, stddef.h, stdbool.h, string.h, stdint.h) kimi kitabxanalar çox önəmlidir.
-		Sadə alqoritlərdən baş açmaq önəmlir və Array, Matrix kimi data sturukturlar önəm daşıyır.
-
-	Linux Terminal biliyi önəmlidir.
-	GitHub və Git biliyidə önəmlidir.
+	RevanScript Data Types -> [String, Integer, Float, Boolean, Binary]
 */
 
 
@@ -111,133 +92,47 @@
 #include "../include/rvsmem.h"
 #include "../include/rvsbuf.h"
 #include "../include/rvsflg.h"
+#include "../include/rvsprs.h"
 
 
 // RevanScript (RVS) Variable Create Function
-bool var(const char* const code_line, RVSMEM* rvs_global_memory){
-	RVSBUF* rvs_variable_buffer = rvs_buffer_create();
+bool var(const char* const code_line, RVSMEM* rvs_memory){
+	// Variable Parser
+	RVSBUF* rvs_variable_buffer = rvs_variable_parser(code_line, rvs_memory, true);
 	if (!rvs_variable_buffer) return false;
 
-	RVSLOGIC rvs_variable_logic;
-	rvs_variable_logic.assignment_operation_check = false;
-	rvs_variable_logic.string_literal_check = false;
-	rvs_variable_logic.binary_start_operation_check = false;
-
-	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
-
-		// Assignment Operator
-		if (code_line[i] == '='){
-			if (rvs_variable_logic.assignment_operation_check == false){
-				rvs_variable_logic.assignment_operation_check = true;
-			}
-		}
-
-		// Variable Name
-		else if (rvs_variable_logic.assignment_operation_check == false){
-			if (code_line[i] == ' ') continue;
-			rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter++] = code_line[i];
-		}
-
-		// Variable Data 
-		else if (rvs_variable_logic.assignment_operation_check == true){
-
-			// String Data Literal (Open / Close) System
-			if (code_line[i] == '\"'){
-				if (rvs_variable_logic.string_literal_check == false){
-					rvs_variable_logic.string_literal_check = true;
-					if (rvs_variable_buffer->variable_type == RVS_UNDEFINED_TYPE){
-						rvs_variable_buffer->variable_type = RVS_STRING_TYPE;
-					}
-				}
-
-				else{
-					rvs_variable_logic.string_literal_check = false;
-					break;
-				}
-			}
-
-			// Binary Type (Open) System
- 			else if (rvs_variable_logic.string_literal_check == false && code_line[i] == 'b'){
-				if (rvs_variable_logic.binary_start_operation_check == false){
-					rvs_variable_logic.binary_start_operation_check = true;
-					if (rvs_variable_buffer->variable_type == RVS_UNDEFINED_TYPE){
-						rvs_variable_buffer->variable_type = RVS_BINARY_TYPE;
-					}
-				}
-			}
-
-			// String Data Buffer write
-			else if (rvs_variable_logic.string_literal_check == true){
-				if (code_line[i] == '\\' && code_line[i + 1] == '\\'){
-					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = '\\';
-					++i;
-				}
-
-				else if (code_line[i] == '\\' && code_line[i + 1] == '\"'){
-					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = '\"';
-					++i;
-				}
-
-				else{
-					rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
-				}
-			}
-
-			// Boolean, Integer, Float, Binary and NULL Types Parsing
-			else{
-				if (code_line[i] == ' ') continue;
-				rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter++] = code_line[i];
-			}
-		}
-	}
-
-	rvs_variable_buffer->variable_name[rvs_variable_buffer->variable_name_counter] = '\0';
-	rvs_variable_buffer->variable_data[rvs_variable_buffer->variable_data_counter] = '\0';
-
-	// RevanScript Buffer "Variable Name" Checking
-	if (rvs_variable_name_check(rvs_variable_buffer, rvs_global_memory, true) == false){
-		rvs_buffer_delete(rvs_variable_buffer);
-		return false;
-	}
-
-	// RevanScript "Constant Variable" Define
-	if (rvs_variable_buffer->variable_name[0] == '_'){
-		rvs_variable_buffer->variable_const = true;
-	}
-
-	// RevanScript Binary Type Default Data
-	if (strlen(rvs_variable_buffer->variable_data) == 0){
-		strcpy(rvs_variable_buffer->variable_data, "00000000");
-		rvs_variable_buffer->variable_data[8] = '\0';
-	}
-
-	// RevanScript automatic NULL data
-	if (rvs_variable_logic.assignment_operation_check == false){
-		strcpy(rvs_variable_buffer->variable_data, "NULL");
-		rvs_variable_buffer->variable_type = RVS_NULL_TYPE;
-	}
-
-	else{
-		// RevanScript Buffer "Variable Data" Checking
-		if (rvs_variable_data_check(rvs_variable_buffer, &rvs_variable_logic) == false){
-			rvs_buffer_delete(rvs_variable_buffer);
-			return false;
-		}
-	}
-
 	// RevanScript Insert Memory
-	if (rvs_memory_insert(rvs_global_memory, rvs_variable_buffer) == false){
+	if (rvs_memory_insert(rvs_memory, rvs_variable_buffer) == false){
+		rvs_buffer_delete(rvs_variable_buffer);
+		return false;
+	}
+	
+	// Delete Buffer
+	rvs_buffer_delete(rvs_variable_buffer);
+	return true;
+}
+
+
+// RevanScript (RVS) Set Function
+bool set(const char* const code_line, RVSMEM* rvs_memory){
+	// Variable Parser
+	RVSBUF* rvs_variable_buffer = rvs_variable_parser(code_line, rvs_memory, false);
+	if (!rvs_variable_buffer) return false;
+
+	// RevanScript Set Memory
+	if (rvs_memory_set(rvs_memory, rvs_variable_buffer) == false){
 		rvs_buffer_delete(rvs_variable_buffer);
 		return false;
 	}
 
+	// Delete Buffer
 	rvs_buffer_delete(rvs_variable_buffer);
 	return true;
 }
 
 
 // RevanScript (RVS) Output Function
-bool out(const char* const code_line, const RVSMEM* const rvs_global_memory){
+bool out(const char* const code_line, const RVSMEM* const rvs_memory, const int8_t* const rvs_execution_mode){
 	RVSBUF* variable_buffer = rvs_buffer_create();
 	if (!variable_buffer) return false;
 
@@ -249,10 +144,10 @@ bool out(const char* const code_line, const RVSMEM* const rvs_global_memory){
 	variable_buffer->variable_name[variable_buffer->variable_name_counter] = '\0';
 	if (!rvs_variable_name_check(variable_buffer, NULL, false)) return false;
 
-	char* output_buffer = rvs_memory_get(rvs_global_memory, variable_buffer);
+	char* output_buffer = rvs_memory_get(rvs_memory, variable_buffer);
 
 	if (output_buffer != NULL){
-		rvs_standard_output(output_buffer);
+		rvs_standard_output(output_buffer, rvs_execution_mode);
 		rvs_buffer_delete(variable_buffer);
 		return true;
 	}
@@ -268,8 +163,43 @@ bool out(const char* const code_line, const RVSMEM* const rvs_global_memory){
 }
 
 
+// RevanScript (RVS) Input Function
+bool inp(const char* const code_line, RVSMEM* rvs_memory){
+	// RevanScript (RVS) Variable Buffer
+	RVSBUF* rvs_buffer = rvs_buffer_create();
+	if (!rvs_buffer) return false;
+
+	// Parsing
+	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
+		if (code_line[i] == ' ') continue;
+		rvs_buffer->variable_name[rvs_buffer->variable_name_counter++] = code_line[i];
+	}
+	rvs_buffer->variable_name[rvs_buffer->variable_name_counter] = '\0';
+
+	// Variable Name Check
+	if (rvs_variable_name_check(rvs_buffer, rvs_memory, false) == false){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
+	}
+	
+	// RevanScript Standard Input
+	rvs_standard_input(rvs_buffer->variable_data);
+	rvs_buffer->variable_type = RVS_STRING_TYPE;
+
+	// RevanScript Set Memory
+	if (rvs_memory_set(rvs_memory, rvs_buffer) == false){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
+	}
+	
+	// Delete Buffer
+	rvs_buffer_delete(rvs_buffer);
+	return true;
+}
+
+
 // RevanScript (RVS) Print Function
-bool prt(const char* const code_line){
+bool prt(const char* const code_line, const int8_t* const rvs_execution_mode){
 	char* buffer = (char*) malloc(sizeof(char) * 2048);
 	if (!buffer) return false;
 	size_t buffer_counter = 0;
@@ -313,7 +243,7 @@ bool prt(const char* const code_line){
 	}
 
 	buffer[buffer_counter] = '\0';
-	rvs_standard_output(buffer);
+	rvs_standard_output(buffer, rvs_execution_mode);
 	free(buffer);
 
 	return true;
@@ -321,23 +251,33 @@ bool prt(const char* const code_line){
 
 
 // RevanScript (RVS) Keyword Search Function
-bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_process_check){
+bool keys(const char* const code_line, RVSMEM* rvs_memory, bool* end_process_check, const int8_t const* rvs_execution_mode){
 	if (strncmp(code_line, "...", 3) == 0){
 		return true;
 	}
 
 	else if (strncmp(code_line, "var ", 4) == 0){
-		if (!var(code_line + 4, rvs_global_memory)) return false;
+		if (!var(code_line + 4, rvs_memory)) return false;
+		return true;
+	}
+
+	else if (strncmp(code_line, "set ", 4) == 0){
+		if (!set(code_line + 4, rvs_memory)) return false;
 		return true;
 	}
 
 	else if (strncmp(code_line, "out ", 4) == 0){
-		if (!out(code_line + 4, rvs_global_memory)) return false;
+		if (!out(code_line + 4, rvs_memory, rvs_execution_mode)) return false;
+		return true;
+	}
+
+	else if (strncmp(code_line, "inp ", 4) == 0){
+		if (!inp(code_line + 4, rvs_memory)) return false;
 		return true;
 	}
 
 	else if (strncmp(code_line, "prt ", 4) == 0){
-		if (!prt(code_line + 4)) return false;
+		if (!prt(code_line + 4, rvs_execution_mode)) return false;
 		return true;
 	}
 
@@ -359,7 +299,9 @@ bool keys(const char* const code_line, RVSMEM* rvs_global_memory, bool* end_proc
 
 
 // RevanScript (RVS) Read Eval Print Loop (REPL) Function
-bool repl(RVSMEM* rvs_global_memory){
+bool repl(RVSMEM* rvs_memory){
+	int8_t rvs_execution_mode = RVS_REPL_MODE;
+
 	char* code_line = (char*) malloc(sizeof(char) * 2049);
 	if (!code_line) return false;
 
@@ -379,7 +321,7 @@ bool repl(RVSMEM* rvs_global_memory){
 			continue;
 		}
 
-		else if (!keys(code_line, rvs_global_memory, &end_process_check)){
+		else if (!keys(code_line, rvs_memory, &end_process_check, &rvs_execution_mode)){
 			free(code_line);
 			return false;
 		}
@@ -396,7 +338,8 @@ bool repl(RVSMEM* rvs_global_memory){
 
 
 // RevanScript (RVS) File Reader
-bool file(const char* const file_name, RVSMEM* rvs_global_memory){
+bool file(const char* const file_name, RVSMEM* rvs_memory){
+	int8_t rvs_execution_mode = RVS_FILE_MODE;
 	FILE* file_open = fopen(file_name, "r");
 
 	if (!file_open){
@@ -424,7 +367,7 @@ bool file(const char* const file_name, RVSMEM* rvs_global_memory){
 				continue;
 			}
 
-			else if (!keys(code_line, rvs_global_memory, &end_process_check)){
+			else if (!keys(code_line, rvs_memory, &end_process_check, &rvs_execution_mode)){
 				free(code_line);
 				fclose(file_open);
 				return false;

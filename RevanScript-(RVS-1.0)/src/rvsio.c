@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #include "../include/rvsio.h"
 
 
-void rvs_standard_output(const char* const data){
+void rvs_standard_output(const char* const data, const int8_t* const rvs_execution_mode){
     size_t data_length = strlen(data);
     size_t i = 0;
     printf("%s", RVS_COLOR_GREEN);
@@ -83,8 +84,23 @@ void rvs_standard_output(const char* const data){
             i++;
         }
     }
-    printf("%s", RVS_COLOR_RESET);
-    putchar('\n');
+    printf("%s", RVS_COLOR_CYAN);
+    if (*rvs_execution_mode == RVS_REPL_MODE){
+        putchar('\n');
+    }
+}
+
+
+void rvs_standard_input(char* input_buffer){
+    printf("%s", RVS_COLOR_GREEN);
+    if (!fgets(input_buffer, 2048, stdin)){
+        return;
+    }
+    
+    else{
+        input_buffer[strlen(input_buffer) - 1] = '\0';
+    }
+    printf("%s", RVS_COLOR_CYAN);
 }
 
 

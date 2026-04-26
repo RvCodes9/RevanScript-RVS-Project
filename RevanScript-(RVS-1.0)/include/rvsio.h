@@ -3,6 +3,11 @@
 
 
 #include <stdbool.h>
+#include <stdint.h>
+
+
+// RevanScript (RVS) Execution Mode
+enum {RVS_FILE_MODE, RVS_REPL_MODE};
 
 
 #define RVS_COLOR_BLACK     "\033[30m"
@@ -37,9 +42,11 @@
 #define RVS_VARIABLE_NAME_CHARACTER_ERROR                 "%s[RVSVariableNameCharacterError] : A variable name can consist of letters, numbers, and underscores!%s\n"
 #define RVS_VARIABLE_NAME_DUBLICATE_ERROR                 "%s[RVSVariableNameDublicateError] : The same variable name cannot be assigned to more than one variable!%s\n"
 #define RVS_VARIABLE_NO_DATA_ERROR                        "%s[RVSVariableNoDataError] : The variable has not been assigned a value!%s\n"
+#define RVS_VARIABLE_CONSTANT_ERROR                       "%s[RVSVariableConstantError] : It is impossible to change a constant variable!%s\n"
 
 
-void rvs_standard_output(const char*);
+void rvs_standard_output(const char*, const int8_t*);
+void rvs_standard_input(char*);
 void rvs_standard_debug(bool, const char*);
 void rvs_standard_error(const char*, const char*);
 

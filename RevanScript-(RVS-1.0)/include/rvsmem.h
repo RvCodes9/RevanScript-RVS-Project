@@ -35,6 +35,7 @@ RVSMEM* rvs_memory_create(void);
 bool rvs_memory_insert(RVSMEM*, const RVSBUF*);
 bool rvs_memory_check(const RVSMEM*, const RVSBUF*);
 char* rvs_memory_get(const RVSMEM*, const RVSBUF*);
+bool rvs_memory_set(RVSMEM* rvs_memory, const RVSBUF* const rvs_buffer);
 void rvs_memory_delete(RVSMEM*);
 
 
