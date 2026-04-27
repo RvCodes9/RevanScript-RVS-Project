@@ -3,6 +3,10 @@
 
 RevanScript (RVS) Direct Execution Interpreter Model
 
+<p align="center">
+  <img src="RevanScript-Logo.png" width="200"/>
+</p>
+
 +---------------------------------------+
 |--< RevanScript (RVS) Documentation >--| 
 +---------------------------------------+
