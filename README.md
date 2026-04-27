@@ -13,7 +13,8 @@ RevanScript (RVS) Direct Execution Interpreter Model
 RevanScript sadə command-based təməli bir proqramlaşdirma dili kimi dizayn etmişən.
 Olduqca sadə və minimal sintaksisə malikdir. Bu dilin çalışmasi üçün tərçüməçi proqram təminatını paylaşmışam. 
 C proqramlaşdırma dili ilə yazmışam.
-Daha ətraflı və praktik nümunələr görmək üçün "https://youtube.com/@RvCodes9" YouTube kanalına baxa bilərsiniz. 
+Daha ətraflı və praktik nümunələr görmək üçün "https://youtube.com/@RvCodes9" YouTube kanalına baxa bilərsiniz.
+Bundan əlavə daha geniş məlumat üçün GitHub Pages də yaratdığım sayta daxil ola bilərsiniz. Saytın linki - "https://rvcodes9.github.io/RevanScript-RVS-Documetation-Site/"
 
 [RevanScript (RVS) Project Layers]
 
