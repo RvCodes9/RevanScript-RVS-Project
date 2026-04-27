@@ -37,3 +37,15 @@ Bundan əlavə daha geniş məlumat üçün GitHub Pages də yaratdığım sayta
 
 :: src/rvsflg.c <br>
 :: include/rvsflg.h <br>
+
+[RevanScript Simple Codes]
+
+... RevanScript (RVS) Comment <br>
+var text = "Hello, World!\n" <br>
+out text <br>
+set text = "\t\c4RevanScript (RVS) Programming Language\n" <br>
+out text <br>
+inp text <br>
+out text <br>
+cst text <br>
+del text <br>
