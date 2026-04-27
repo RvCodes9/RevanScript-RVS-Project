@@ -1,0 +1,97 @@
+... RevanScript Programming Language
+... RevanScript Real Test Case 
+
+var pl0 = "Python"
+var pl1 = "Java"
+var pl2 = "C#"
+var pl3 = "C++"
+var pl4 = "C"
+var pl5 = "Rust"
+var pl6 = "Go"
+var pl7 = "Assembly"
+var pl8 = "Ruby"
+var pl9 = "Kotlin"
+var pl10 = "Pascal"
+var pl11 = "Basic"
+var pl12 = "Cobol"
+var pl13 = "Ada"
+var pl14 = "JavaScript"
+var pl15 = "TypeScript"
+var pl16 = "PHP"
+var pl17 = "RevanScript"
+var pl18 = "Lua"
+
+out pl0
+prt "\n"
+del pl0
+
+out pl1
+prt "\n"
+del pl1
+
+out pl2
+prt "\n"
+del pl2
+
+out pl3
+prt "\n"
+del pl3
+
+out pl4
+prt "\n"
+del pl4
+
+out pl5
+prt "\n"
+del pl5
+
+out pl6
+prt "\n"
+del pl6
+
+out pl7
+prt "\n"
+del pl7
+
+out pl8
+prt "\n"
+del pl8
+
+out pl9
+prt "\n"
+del pl9
+
+out pl10
+prt "\n"
+del pl10
+
+out pl11
+prt "\n"
+del pl11
+
+out pl12
+prt "\n"
+del pl12
+
+out pl13
+prt "\n"
+del pl13
+
+out pl14
+prt "\n"
+del pl14
+
+out pl15
+prt "\n"
+del pl15
+
+out pl16
+prt "\n"
+del pl16
+
+out pl17
+prt "\n"
+del pl17
+
+out pl18
+del pl18

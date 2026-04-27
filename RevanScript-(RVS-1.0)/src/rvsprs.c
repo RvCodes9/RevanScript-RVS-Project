@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "../include/rvsprs.h"
 #include "../include/rvsbuf.h"
@@ -124,4 +125,20 @@ RVSBUF* rvs_variable_parser(const char* const code_line, RVSMEM* rvs_memory, boo
 	}
 
     return rvs_variable_buffer;
+}
+
+
+// RevanScript (RVS) Variable Name Parser
+RVSBUF* rvs_variable_name_parser(const char* const code_line){
+	// RevanScript (RVS) Variable Buffer
+	RVSBUF* rvs_buffer = rvs_buffer_create();
+	if (!rvs_buffer) return NULL;
+
+	// Parsing
+	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
+		if (code_line[i] == ' ') continue;
+		rvs_buffer->variable_name[rvs_buffer->variable_name_counter++] = code_line[i];
+	}
+	rvs_buffer->variable_name[rvs_buffer->variable_name_counter] = '\0';
+	return rvs_buffer;
 }

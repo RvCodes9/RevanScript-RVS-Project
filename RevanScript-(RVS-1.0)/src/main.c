@@ -133,48 +133,41 @@ bool set(const char* const code_line, RVSMEM* rvs_memory){
 
 // RevanScript (RVS) Output Function
 bool out(const char* const code_line, const RVSMEM* const rvs_memory, const int8_t* const rvs_execution_mode){
-	RVSBUF* variable_buffer = rvs_buffer_create();
-	if (!variable_buffer) return false;
+	// RevanScript Variable Name Parser
+	RVSBUF* rvs_buffer = rvs_variable_name_parser(code_line);
+	if (!rvs_buffer) return false;
 
-	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
-		if (code_line[i] == ' ') continue;
-		variable_buffer->variable_name[variable_buffer->variable_name_counter++] = code_line[i];
+	// RevanScript Variable Name Check
+	if (!rvs_variable_name_check(rvs_buffer, NULL, false)){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
 	}
 
-	variable_buffer->variable_name[variable_buffer->variable_name_counter] = '\0';
-	if (!rvs_variable_name_check(variable_buffer, NULL, false)) return false;
-
-	char* output_buffer = rvs_memory_get(rvs_memory, variable_buffer);
-
+	// RevanScript Output
+	char* output_buffer = rvs_memory_get(rvs_memory, rvs_buffer);
 	if (output_buffer != NULL){
 		rvs_standard_output(output_buffer, rvs_execution_mode);
-		rvs_buffer_delete(variable_buffer);
+		rvs_buffer_delete(rvs_buffer);
 		return true;
 	}
 
 	else{
 		rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
-		rvs_buffer_delete(variable_buffer);
+		rvs_buffer_delete(rvs_buffer);
 		return false;
 	}
 
-	rvs_buffer_delete(variable_buffer);
+	// RevanScript Buffer Delete
+	rvs_buffer_delete(rvs_buffer);
 	return true;
 }
 
 
 // RevanScript (RVS) Input Function
 bool inp(const char* const code_line, RVSMEM* rvs_memory){
-	// RevanScript (RVS) Variable Buffer
-	RVSBUF* rvs_buffer = rvs_buffer_create();
+	// RevanScript Variable Name Parser
+	RVSBUF* rvs_buffer = rvs_variable_name_parser(code_line);
 	if (!rvs_buffer) return false;
-
-	// Parsing
-	for (size_t i = 0; code_line[i] != '\n' && code_line[i] != '\0'; i++){
-		if (code_line[i] == ' ') continue;
-		rvs_buffer->variable_name[rvs_buffer->variable_name_counter++] = code_line[i];
-	}
-	rvs_buffer->variable_name[rvs_buffer->variable_name_counter] = '\0';
 
 	// Variable Name Check
 	if (rvs_variable_name_check(rvs_buffer, rvs_memory, false) == false){
@@ -193,6 +186,54 @@ bool inp(const char* const code_line, RVSMEM* rvs_memory){
 	}
 	
 	// Delete Buffer
+	rvs_buffer_delete(rvs_buffer);
+	return true;
+}
+
+
+// RevanScript (RVS) Constant Function
+bool cst(const char* const code_line, RVSMEM* rvs_memory){
+	// RevanScript Variable Name Parser
+	RVSBUF* rvs_buffer = rvs_variable_name_parser(code_line);
+	if (!rvs_buffer) return false;
+
+	// RevanScript Variable Name Check
+	if (rvs_variable_name_check(rvs_buffer, rvs_memory, false) == false){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
+	}
+
+	// RevanScript Memory Variable Constant Define
+	if (rvs_memory_cst(rvs_memory, rvs_buffer) == false){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
+	}
+
+	// Delete Buffer
+	rvs_buffer_delete(rvs_buffer);
+	return true;
+}
+
+
+// RevanScript (RVS) Delete Function
+bool del(const char* const code_line, RVSMEM* rvs_memory){
+	// RevanScript Variable Name Parser
+	RVSBUF* rvs_buffer = rvs_variable_name_parser(code_line);
+	if (!rvs_buffer) return false;
+
+	// RevanScript Variable Name Check
+	if (rvs_variable_name_check(rvs_buffer, rvs_memory, false) == false){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
+	}
+
+	// RevanScript Variable Clear Memory
+	if (rvs_memory_clear(rvs_memory, rvs_buffer) == false){
+		rvs_buffer_delete(rvs_buffer);
+		return false;
+	}
+
+	// RevanScript Buffer Delete
 	rvs_buffer_delete(rvs_buffer);
 	return true;
 }
@@ -273,6 +314,16 @@ bool keys(const char* const code_line, RVSMEM* rvs_memory, bool* end_process_che
 
 	else if (strncmp(code_line, "inp ", 4) == 0){
 		if (!inp(code_line + 4, rvs_memory)) return false;
+		return true;
+	}
+
+	else if (strncmp(code_line, "cst ", 4) == 0){
+		if (!cst(code_line + 4, rvs_memory)) return false;
+		return true;
+	}
+
+	else if (strncmp(code_line, "del ", 4) == 0){
+		if (!del(code_line + 4, rvs_memory)) return false;
 		return true;
 	}
 
