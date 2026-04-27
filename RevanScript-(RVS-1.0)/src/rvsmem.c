@@ -324,6 +324,7 @@ char* rvs_memory_get(const RVSMEM* const rvs_memory, const RVSBUF* const rvs_buf
             }
         }
     }
+    rvs_standard_error(RVS_VARIABLE_UNDEFINED_ERROR, rvs_buffer->variable_name);
     return NULL;
 }
 
@@ -346,7 +347,7 @@ bool rvs_memory_set(RVSMEM* rvs_memory, const RVSBUF* const rvs_buffer){
             }
         }
     }
-    rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
+    rvs_standard_error(RVS_VARIABLE_UNDEFINED_ERROR, rvs_buffer->variable_name);
     return false;
 }
 
@@ -361,7 +362,7 @@ bool rvs_memory_cst(RVSMEM* rvs_memory, const RVSBUF* const rvs_buffer){
             }
         }
     }
-    rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
+    rvs_standard_error(RVS_VARIABLE_UNDEFINED_ERROR, rvs_buffer->variable_name);
     return false;
 }
 
@@ -381,7 +382,7 @@ bool rvs_memory_clear(RVSMEM* rvs_memory, const RVSBUF* const rvs_buffer){
             }
         }
     }
-    rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
+    rvs_standard_error(RVS_VARIABLE_UNDEFINED_ERROR, rvs_buffer->variable_name);
     return false;
 }
 

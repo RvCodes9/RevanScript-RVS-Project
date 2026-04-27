@@ -43,6 +43,7 @@ enum {RVS_FILE_MODE, RVS_REPL_MODE};
 #define RVS_VARIABLE_NAME_DUBLICATE_ERROR                 "%s[RVSVariableNameDublicateError] : The same variable name cannot be assigned to more than one variable!%s\n"
 #define RVS_VARIABLE_NO_DATA_ERROR                        "%s[RVSVariableNoDataError] : The variable has not been assigned a value!%s\n"
 #define RVS_VARIABLE_CONSTANT_ERROR                       "%s[RVSVariableConstantError] : It is impossible to change a constant variable!%s\n"
+#define RVS_VARIABLE_UNDEFINED_ERROR                      "%s[RVSVariableUndefinedError] : The variable named \"%s\" does not exist!%s\n"
 
 
 void rvs_standard_output(const char*, const int8_t*);

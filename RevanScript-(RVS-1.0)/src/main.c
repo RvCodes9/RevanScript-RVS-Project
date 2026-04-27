@@ -152,7 +152,6 @@ bool out(const char* const code_line, const RVSMEM* const rvs_memory, const int8
 	}
 
 	else{
-		rvs_standard_error(RVS_VARIABLE_NO_NAME_ERROR, NULL);
 		rvs_buffer_delete(rvs_buffer);
 		return false;
 	}
