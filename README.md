@@ -40,8 +40,8 @@ Bundan əlavə daha geniş məlumat üçün GitHub Pages də yaratdığım sayta
 
 5) RevanScript (RVS) Control/Checking 
 
-:: src/rvsctl.c
-:: include/rvsctl.h
+:: src/rvsctl.c <br>
+:: include/rvsctl.h <br>
 
 [RevanScript Simple Codes]
 
