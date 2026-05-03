@@ -38,6 +38,11 @@ Bundan əlavə daha geniş məlumat üçün GitHub Pages də yaratdığım sayta
 :: src/rvsflg.c <br>
 :: include/rvsflg.h <br>
 
+5) RevanScript (RVS) Control/Checking 
+
+:: src/rvsctl.c
+:: include/rvsctl.h
+
 [RevanScript Simple Codes]
 
 ... RevanScript (RVS) Comment <br>
