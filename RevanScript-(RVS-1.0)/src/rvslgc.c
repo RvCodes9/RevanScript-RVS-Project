@@ -1,5 +1,7 @@
+// C Standard Libraries
 #include <stdlib.h>
 
+// RevanScript (RVS) Core / Engine Libraries
 #include "../include/rvsctl.h"
 #include "../include/rvslgc.h"
 

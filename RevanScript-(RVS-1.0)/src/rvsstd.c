@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-// RevanScript (RVS) Core / Engine Librarys
+// RevanScript (RVS) Core / Engine Libraries
 #include "../include/rvsprs.h"
 #include "../include/rvsmem.h"
 #include "../include/rvsbuf.h"

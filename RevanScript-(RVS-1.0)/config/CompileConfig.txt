@@ -1,5 +1,5 @@
-CompilerName = clang
+CompilerName = gcc
 CompileType = Static
 LanguageStandard = c99
 CompilerOptimization = Medium
-OutputFile = ../bin/clang/RevanScript
+OutputFile = ../bin/gcc/RevanScript

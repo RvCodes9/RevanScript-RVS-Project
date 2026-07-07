@@ -1,11 +1,11 @@
-// C Standard Librarys
+// C Standard Libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stdint.h>
 
-// RevanScript (RVS) Core / Engine Librarys
+// RevanScript (RVS) Core / Engine Libraries
 #include "../include/rvsio.h"
 #include "../include/rvserr.h"
 #include "../include/rvsflg.h"
@@ -51,9 +51,22 @@ void rvs_flag_about(void){
 
 
 bool rvs_flag_documentation(void){
-    if (!system("xdg-open https://rvcodes9.github.io/RevanScript-RVS-Documetation-Site/")){
+    if (system("xdg-open https://rvcodes9.github.io/RevanScript-RVS-Documentation-Site/") != 0){
         return false;
     }
+    return true;
+}
+
+
+void rvs_flag_help(void){
+    printf("%s", RVS_COLOR_MAGENTA_ESCAPE_CODE);
+    puts("\n\tRevanScript (RVS) Flags\n");
+    printf("%s", RVS_COLOR_YELLOW_ESCAPE_CODE);
+    puts("\t[--version or -V]\n");
+    puts("\t[--about or -A]\n");
+    puts("\t[--documentation or -D]\n");
+    puts("\t[--help or -H]\n");
+    printf("%s", RVS_COLOR_RESET_ESCAPE_CODE);
 }
 
 
@@ -70,6 +83,11 @@ uint8_t rvs_flag_title_check(const char* const flag_title){
 
     else if (strcmp(flag_title, "-D") == 0 || strcmp(flag_title, "--documentation") == 0){
         if (!rvs_flag_documentation()) return 1;
+        return 0;
+    }
+
+    else if (strcmp(flag_title, "-H") == 0 || strcmp(flag_title, "--help") == 0){
+        rvs_flag_help();
         return 0;
     }
 

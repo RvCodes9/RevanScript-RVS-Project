@@ -1,4 +1,4 @@
-// RevanScript (RVS) Core / Engine Librarys
+// RevanScript (RVS) Core / Engine Libraries
 #include "../include/rvskey.h"
 
 const unsigned short rvs_keywords_length[RVS_KEYWORD_COUNT] = {

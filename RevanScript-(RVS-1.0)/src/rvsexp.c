@@ -1,9 +1,9 @@
-// C Standard Librarys
+// C Standard Libraries
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 
-// RevanScript (RVS) Core / Engine Librarys
+// RevanScript (RVS) Core / Engine Libraries
 #include "../include/rvsexp.h"
 #include "../include/rvsbuf.h"
 #include "../include/rvsmth.h"
