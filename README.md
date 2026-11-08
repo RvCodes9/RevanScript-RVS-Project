@@ -7,23 +7,9 @@ An efficient, lightweight, and direct-execution interpreter model built from scr
 </p>
 
 ## 📖 Introduction
+**RevanScript (RVS)** sadə, command-based (əmr əsaslı) təmələ sahib bir proqramlaşdırma dilidir. Olduqca minimal və anlaşılan bir sintaksisə malikdir. RevanScript (RVS) dilinin əsas üstünlüyü onun sürətli və yüngül işləyən daxili tərcüməçi (interpreter) proqramına sahib olmasıdır. 
 
-**RevanScript (RVS)** is a programming language built on a simple, command-based foundation. It features a minimal and easy-to-understand syntax. One of the main advantages of RevanScript (RVS) is its lightweight and fast built-in interpreter.
-
-Unlike languages such as Python, Java, and JavaScript, RVS focuses on a simple execution engine while preserving built-in automation capabilities.
-
-The project is developed entirely from scratch using the **C programming language**, following the C99 standard (ISO/IEC 9899:1999). The project supports the following compilers: GCC, Clang, and MinGW-GCC.
-
-RevanScript is designed to support the following platforms:
-
-- Linux
-- Windows
-
-Several tools can be used to build the project:
-
-1. **SimpleMake (Tool)**
-2. **Python (CPython 3) Scripts**
-3. **Terminal (Console Shells)**
+Layihə tamamilə **C proqramlaşdırma dili** ilə sıfırdan hazırlanmışdır. C dilinin 1999 cu ildə tərtib olunmuş C99 Standardını istifadə edilir. Lahiyədə (GCC, Clang, MinGW-GCC) kompilatorlarından istifadə olunur. Lahiyənin platforma dəstəyi (Linux, Windows) üçün dəstəklənir.
 
 ## 💎 Data Types
 
@@ -36,12 +22,9 @@ The language supports the management of various data types. The following primit
 - **Null** — Null value type
 
 ## ⚙️ Structure Types
-
-More complex data types are required to store and manage collections of data. RevanScript provides the following structure types:
-
-- **Box** — List data type
-- **Map** — Key-value mapping data type
-- **Set** — Unique collection data type
+Dildə müxtəlif məlumatları toplu şəkildə saxlamaq üçün daha mürrəkkəb tiplərə ehtiyac olur:
+* **Box** (Siyahı tipi)
+* **Map** (Xəritə tipi)
 
 ## 📂 Project Layers & Architecture
 
@@ -71,31 +54,12 @@ cst text
 del text
 ```
 
-## 🎮 Games Mode
-
-The RevanScript interpreter includes a dedicated **Games Mode**, designed for entertainment purposes.
-
-The following games are currently planned:
-
-1. **Guess the Number (Console)**
-2. **Tic Tac Toe (Console)**
-3. **Minesweeper (Console)**
-4. **Sudoku (Console)**
-5. **Chess (Console)**
-6. **Sea Battle (Console)**
-7. **Flappy Bird (Graphics)**
-8. **Tetris (Graphics)**
-
 ## 🌐 Community & Official Links
+RevanScript inkişaf prosesini izləmək və layihəyə dəstək olmaq üçün aşağıdakı rəsmi resurslardan istifadə edə bilərsiniz:
 
-Follow the development of RevanScript (RVS) and support the project through its official resources:
-
-- **📺 YouTube Tutorials:** [RvCodes9 YouTube Channel](https://youtube.com/@RvCodes9) | [RevanScript (RVS) YouTube Channel](https://youtube.com/@RVS-Lang) — Practical examples and video tutorials.
-- **📄 Official Documentation:** [RevanScript Documentation Website](https://rvcodes9.github.io/RevanScript-RVS-Documentation-Site/) — Detailed information and tutorials.
-- **💬 Reddit Community:** [r/RevanScript](https://www.reddit.com/r/RevanScript/) — Share ideas, participate in discussions, and ask questions in the official subreddit.
+* **📺 YouTube Tutorials:** [RvCodes9 YouTube Channel](https://youtube.com/@RvCodes9) — Praktik nümunələr və video bələdçilər.
+* **📄 Official Documentation:** [RevanScript Pages Site](https://rvcodes9.github.io/RevanScript-RVS-Documetation-Site/) — Geniş məlumat və dərsliklər.
+* **💬 Reddit Community:** [r/RevanScript](https://www.reddit.com/r/RevanScript/) — Fikir bildirmək, müzakirə etmək və sual vermək üçün rəsmi sub-reddit.
 
 ## 💡 Creator & Developer
-
-The RevanScript (RVS) programming language was created by **Rəvan Babayev in 2026** and is currently under active development.
-
-The theoretical exploration and initial design of the language's capabilities date back to **2024–2025**.
+RevanScript (RVS) proqramlaşdırma dili 2026-cı ildə Rəvan Babayev tərəfindən yaradılmışdir və hazırda aktiv ikişaf etdirilən lahiyədir.
