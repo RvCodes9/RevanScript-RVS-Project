@@ -31,6 +31,7 @@
 #include "../includes/rvserr.h"
 #include "../includes/rvsdef.h"
 #include "../includes/rvsflg.h"
+#include "../includes/rvscol.h"
 
 // RevanScript (RVS) Subsystem Libraries
 #include "../includes/games/menu.h"
@@ -74,7 +75,7 @@ void rvs_flag_about(void){
 }
 
 bool rvs_flag_documentation(void){
-    if (!system("xdg-open https://rvcodes9.github.io/RevanScript-RVS-Documetation-Site/")){
+    if (!system("xdg-open https://rvcodes9.github.io/RevanScript-RVS-Documentation-Site/")){
         return false;
     }
     return true;

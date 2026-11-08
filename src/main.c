@@ -104,6 +104,8 @@
 #include "../includes/rvsflg.h"
 #include "../includes/rvskey.h"
 #include "../includes/rvserr.h"
+#include "../includes/rvscol.h"
+
 
 // RevanScript (RVS) Windows Application Programming Interface (API) Library
 #ifdef __RVS_WINDOWS_OS_DEFINE__

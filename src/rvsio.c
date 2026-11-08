@@ -32,6 +32,7 @@
 // RevanScript (RVS) Core / Engine Libraries
 #include "../includes/rvsio.h"
 #include "../includes/rvstbl.h"
+#include "../includes/rvscol.h"
 
 
 // RevanScript Standard Output Function

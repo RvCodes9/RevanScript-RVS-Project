@@ -1,0 +1,97 @@
+[Project]
+Name = "RevanScript (RVS)"
+Version = "1.0"
+
+[Compiler]
+Name0 = "gcc"
+Name1 = "clang"
+Name2 = "x86_64-w64-mingw32-gcc"
+
+[Build]
+SourceFiles = [
+    "../../src/main.c",
+    "../../src/rvsbuf.c",
+    "../../src/rvsctl.c",
+    "../../src/rvsexp.c",
+    "../../src/rvsflg.c",
+    "../../src/rvsio.c",
+    "../../src/rvslgc.c",
+    "../../src/rvsmem.c",
+    "../../src/rvsmth.c",
+    "../../src/rvsprs.c",
+    "../../src/rvsstd.c",
+    "../../src/rvstbl.c",
+    "../../src/rvskey.c",
+    "../../src/rvsarr.c",
+    "../../src/rvsmtx.c",
+    "../../src/games/menu.c",
+    "../../src/games/console/tictactoe/init.c",
+    "../../src/games/console/minesweeper/init.c"
+]
+GCCObjectFiles = [
+    "../../objects/gcc/main.o",
+    "../../objects/gcc/rvsbuf.o",
+    "../../objects/gcc/rvsctl.o",
+    "../../objects/gcc/rvsexp.o",
+    "../../objects/gcc/rvsflg.o",
+    "../../objects/gcc/rvsio.o",
+    "../../objects/gcc/rvslgc.o",
+    "../../objects/gcc/rvsmem.o",
+    "../../objects/gcc/rvsmth.o",
+    "../../objects/gcc/rvsprs.o",
+    "../../objects/gcc/rvsstd.o",
+    "../../objects/gcc/rvstbl.o",
+    "../../objects/gcc/rvskey.o",
+    "../../objects/gcc/rvsarr.o",
+    "../../objects/gcc/rvsmtx.o",
+    "../../objects/gcc/games/menu.o",
+    "../../objects/gcc/games/console/tictactoe/init.o",
+    "../../objects/gcc/games/console/minesweeper/init.o"
+]
+ClangObjectFiles = [
+    "../../objects/clang/main.o",
+    "../../objects/clang/rvsbuf.o",
+    "../../objects/clang/rvsctl.o",
+    "../../objects/clang/rvsexp.o",
+    "../../objects/clang/rvsflg.o",
+    "../../objects/clang/rvsio.o",
+    "../../objects/clang/rvslgc.o",
+    "../../objects/clang/rvsmem.o",
+    "../../objects/clang/rvsmth.o",
+    "../../objects/clang/rvsprs.o",
+    "../../objects/clang/rvsstd.o",
+    "../../objects/clang/rvstbl.o",
+    "../../objects/clang/rvskey.o",
+    "../../objects/clang/rvsarr.o",
+    "../../objects/clang/rvsmtx.o",
+    "../../objects/clang/games/menu.o",
+    "../../objects/clang/games/console/tictactoe/init.o",
+    "../../objects/clang/games/console/minesweeper/init.o"
+]
+MinGWGCCObjectFiles = [
+    "../../objects/mingw-gcc/main.o",
+    "../../objects/mingw-gcc/rvsbuf.o",
+    "../../objects/mingw-gcc/rvsctl.o",
+    "../../objects/mingw-gcc/rvsexp.o",
+    "../../objects/mingw-gcc/rvsflg.o",
+    "../../objects/mingw-gcc/rvsio.o",
+    "../../objects/mingw-gcc/rvslgc.o",
+    "../../objects/mingw-gcc/rvsmem.o",
+    "../../objects/mingw-gcc/rvsmth.o",
+    "../../objects/mingw-gcc/rvsprs.o",
+    "../../objects/mingw-gcc/rvsstd.o",
+    "../../objects/mingw-gcc/rvstbl.o",
+    "../../objects/mingw-gcc/rvskey.o",
+    "../../objects/mingw-gcc/rvsarr.o",
+    "../../objects/mingw-gcc/rvsmtx.o",
+    "../../objects/mingw-gcc/games/menu.o",
+    "../../objects/mingw-gcc/games/console/tictactoe/init.o",
+    "../../objects/mingw-gcc/games/console/minesweeper/init.o"
+]
+Flags = [
+    "-static",
+    "-std=c99",
+    "-O2"
+]
+LinuxOutputFile = "../bin/gcc/RevanScript"
+WindowsOutputFile = "../bin/gcc/RevanScript.exe"
