@@ -93,6 +93,7 @@ void rvs_standard_output(const RVSIO_Buffer* const data, const int8_t* const rvs
         
         // Color Escape Sequances
         else if (data_length >= i + 3 && data->output_buffer[i] == '\\' && data->output_buffer[i + 1] == 'c'){
+            unsigned int random_color_index = (unsigned int) rand() % 8;
             switch (data->output_buffer[i + 2]){
                 case '0': printf("%s", RVS_COLOR_RESET_ESCAPE_CODE);   i += 3; break;
                 case '1': printf("%s", RVS_COLOR_BLACK_ESCAPE_CODE);   i += 3; break;
@@ -104,7 +105,6 @@ void rvs_standard_output(const RVSIO_Buffer* const data, const int8_t* const rvs
                 case '7': printf("%s", RVS_COLOR_CYAN_ESCAPE_CODE);    i += 3; break;
                 case '8': printf("%s", RVS_COLOR_WHITE_ESCAPE_CODE);   i += 3; break;
                 case 'r':
-                    unsigned int random_color_index = (unsigned int) rand() % 8;
                     switch (random_color_index){
                         case 0: printf("%s", RVS_COLOR_RESET_ESCAPE_CODE);    break;
                         case 1: printf("%s", RVS_COLOR_BLACK_ESCAPE_CODE);    break;
