@@ -89,6 +89,12 @@ if x86_64-w64-mingw32-gcc -std=c99 -O2 -c ../src/rvsmtx.c -o ../objects/mingw-gc
 else
 	echo "Failed [rvsmtx.o] object file!!!"
 fi
+# CORE -- rvswin.c
+if x86_64-w64-mingw32-gcc -std=c99 -O2 -c ../src/rvswin.c -o ../objects/mingw-gcc/rvswin.o; then
+	echo "Successful [rvswin.o] object file!!!"
+else
+	echo "Failed [rvswin.o] object file!!!"
+fi
 # SUBSYSTEM -- menu.c
 if x86_64-w64-mingw32-gcc -std=c99 -O2 -c ../src/games/menu.c -o ../objects/mingw-gcc/games/menu.o; then
 	echo "Successful [Subsystem][games/menu.o] object file!!!"

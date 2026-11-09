@@ -18,6 +18,13 @@
 	---------------------------------------------
 */
 
+// RevanScript (RVS) Core / Engine Libraries
+#include "../includes/rvsdef.h"
+
+#ifdef RVS_WINDOWS_OS_DEFINE
+
+// C - Windows Library / Windows API
+#include <windows.h>
 
 // RevanScript (RVS) Core / Engine Libraries
 #include "../includes/rvswin.h"
@@ -30,3 +37,5 @@ void rvs_windows_console_init(void){
     mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     SetConsoleMode(hConsole, mode);
 }
+
+#endif

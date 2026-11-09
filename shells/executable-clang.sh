@@ -89,6 +89,12 @@ if clang -std=c99 -O2 -c ../src/rvsmtx.c -o ../objects/clang/rvsmtx.o; then
 else
 	echo "Failed [rvsmtx.o] object file!!!"
 fi
+# CORE -- rvswin.c
+if clang -std=c99 -O2 -c ../src/rvswin.c -o ../objects/clang/rvswin.o; then
+	echo "Successful [rvswin.o] object file!!!"
+else
+	echo "Failed [rvswin.o] object file!!!"
+fi
 # SUBSYSTEM -- menu.c
 if clang -std=c99 -O2 -c ../src/games/menu.c -o ../objects/clang/games/menu.o; then
 	echo "Successful [Subsystem][games/menu.o] object file!!!"

@@ -1,13 +1,18 @@
+# Python Configure / RevanScript (RVS) Build System
+
 [Project]
+
 Name = "RevanScript (RVS)"
 Version = "1.0"
 
 [Compiler]
+
 Name0 = "gcc"
 Name1 = "clang"
 Name2 = "x86_64-w64-mingw32-gcc"
 
 [Build]
+
 SourceFiles = [
     "../../src/main.c",
     "../../src/rvsbuf.c",
@@ -24,7 +29,10 @@ SourceFiles = [
     "../../src/rvskey.c",
     "../../src/rvsarr.c",
     "../../src/rvsmtx.c",
+    "../../src/rvswin.c",
     "../../src/games/menu.c",
+    "../../src/games/console/guess-the-number/init.c",
+    "../../src/games/console/guess-the-number/game.c",
     "../../src/games/console/tictactoe/init.c",
     "../../src/games/console/minesweeper/init.c"
 ]
@@ -44,7 +52,10 @@ GCCObjectFiles = [
     "../../objects/gcc/rvskey.o",
     "../../objects/gcc/rvsarr.o",
     "../../objects/gcc/rvsmtx.o",
+    "../../objects/gcc/rvswin.o",
     "../../objects/gcc/games/menu.o",
+    "../../objects/gcc/games/console/guess-the-number/init.o",
+    "../../objects/gcc/games/console/guess-the-number/game.o",
     "../../objects/gcc/games/console/tictactoe/init.o",
     "../../objects/gcc/games/console/minesweeper/init.o"
 ]
@@ -64,10 +75,14 @@ ClangObjectFiles = [
     "../../objects/clang/rvskey.o",
     "../../objects/clang/rvsarr.o",
     "../../objects/clang/rvsmtx.o",
+    "../../objects/clang/rvswin.o",
     "../../objects/clang/games/menu.o",
+    "../../objects/clang/games/console/guess-the-number/init.o",
+    "../../objects/clang/games/console/guess-the-number/game.o",
     "../../objects/clang/games/console/tictactoe/init.o",
     "../../objects/clang/games/console/minesweeper/init.o"
 ]
+
 MinGWGCCObjectFiles = [
     "../../objects/mingw-gcc/main.o",
     "../../objects/mingw-gcc/rvsbuf.o",
@@ -84,14 +99,19 @@ MinGWGCCObjectFiles = [
     "../../objects/mingw-gcc/rvskey.o",
     "../../objects/mingw-gcc/rvsarr.o",
     "../../objects/mingw-gcc/rvsmtx.o",
+    "../../objects/mingw-gcc/rvswin.o",
     "../../objects/mingw-gcc/games/menu.o",
+    "../../objects/mingw-gcc/games/console/guess-the-number/init.o",
+    "../../objects/mingw-gcc/games/console/guess-the-number/game.o",
     "../../objects/mingw-gcc/games/console/tictactoe/init.o",
     "../../objects/mingw-gcc/games/console/minesweeper/init.o"
 ]
+
 Flags = [
     "-static",
     "-std=c99",
     "-O2"
 ]
+
 LinuxOutputFile = "../bin/gcc/RevanScript"
 WindowsOutputFile = "../bin/gcc/RevanScript.exe"
