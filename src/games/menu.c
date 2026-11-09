@@ -42,11 +42,18 @@ bool rvs_games_menu_init(void){
         RVS_COLOR_RESET_ESCAPE_CODE);
 
         int input_game_index;
-        scanf("%d", &input_game_index);
+        int result_input = scanf("%d", &input_game_index);
+        if (result_input != 1){
+            rvs_table_delete(__rvs_game_table);
+            return false;
+        }
         
         switch (input_game_index){
             case 1: 
-                if (console_game_guess_the_number_init() == false) return false; 
+                if (console_game_guess_the_number_init() == false){
+                    rvs_table_delete(__rvs_game_table);
+                    return false;
+                } 
                 break;
             case 2: 
                 break; 

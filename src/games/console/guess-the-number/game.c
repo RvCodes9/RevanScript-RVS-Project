@@ -22,7 +22,8 @@ bool guess_the_number_game_main(void){
 
     while (true){
         printf("%sEnter a number : ", RVS_COLOR_BLUE_ESCAPE_CODE);
-        scanf("%d", &input_number);
+        int result_input = scanf("%d", &input_number);
+        if (result_input != 1) return false;
 
         if (random_number == input_number){
             random_number = rand() % 10 + 1;
